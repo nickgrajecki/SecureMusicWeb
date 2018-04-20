@@ -9,6 +9,8 @@
         <!--StyleSheets-->
         <link rel="stylesheet" type="text/css" href="SecureMusicCSS.css" />
         <link href="https://fonts.googleapis.com/css?family=Gugi" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script type="text/javascript" src="SecureMusicJS.js"></script>
     </head>
 
@@ -35,29 +37,34 @@
         <div class="main">
 
             <!--Login form requiring username and password-->
-            <div class="login">
-                <div class="loginTab">
+            <div class="loginSection">
+                
+                <!--Uses Javascript to swap between login and register tabs-->
+                <div class="loginRegister">
                     <button id="log" onclick="switchToLogin()"> Login </button>
                     <button id="reg" onclick="switchToRegister()"> Register </button>
                 </div>
 
+                <!--Login Form-->
                 <form id="login" class="tabContent" method="post" action="login">
                     <fieldset>
-                        <legend>Enter your username and password</legend>
+                        <h3>Enter your username and password</h3>
                         <label>Username: </label><input type="text" name="username" id="user" required><br/>
                         <label>Password: </label><input type="password" name="pass" id="password" required><br/>
                         <input class="loginsubmission" type="submit" value="login" />
                     </fieldset>
                 </form>
 
+                <!--Register Form-->
                 <form id="register" class="tabContent" method="post" action="register">
                     <fieldset>
-                        <legend>Create your username and password</legend>
+                        <h3>Create your username and password</h3>
                         <label>Username: </label><input type="text" name="newusername" id="newuser" required><br/>
                         <label>Password: </label><input type="password" name="newpassword" id="newpass" required><br/>
                         <input class="newusersubmission" type="submit" value="login" />
                     </fieldset>
                 </form>
+                
             </div>
 
             <div class="forumDirectory">

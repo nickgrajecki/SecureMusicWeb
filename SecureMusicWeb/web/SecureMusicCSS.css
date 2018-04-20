@@ -22,8 +22,8 @@
     
 }
 
-.login {
-    width: 10%;
+.loginSection {
+    width: 15%;
     float: right;
     border: 2px solid white;
     padding-left: 3em;
@@ -33,12 +33,37 @@
     margin-right: 2em;
 }
 
+button {
+    background-color: darkgray;
+    color: black;
+    border: 2px solid white;
+    font-family: 'Gugi', cursive;
+    font-size: medium;
+    padding: 3%;
+    margin: 1%;
+}
+
+button:hover {
+    background-color: white;
+    color: black;
+}
+
 #user {
     margin-top: 1em;
     margin-bottom: 1em;
 }
 
 #password {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+#newuser {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+#newpass {
     margin-top: 1em;
     margin-bottom: 1em;
 }

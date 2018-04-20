@@ -12,3 +12,8 @@ function switchToRegister() {
     
 }
 
+$(document).ready(function () {
+    $("#register").hide();
+    $("#login").show();
+});
+
