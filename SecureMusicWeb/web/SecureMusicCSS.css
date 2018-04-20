@@ -1,3 +1,12 @@
+/*CSS for entire website*/
+body {
+    background-color: black;
+    font-family: 'Gugi', cursive;
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
 /*All styling for header on each page*/
 .header {
     max-width: 100%;
@@ -12,16 +21,13 @@
     float: top;
 }
 
+/*Styling for navigation bar*/
 .navigationBar li {
     display: inline;
     margin-left: 10em;
 }
 
-/*All styling for main on each page*/
-.main {
-    
-}
-
+/*Styling for login section*/
 .loginSection {
     width: 16%;
     float: right;
@@ -35,12 +41,15 @@
 
 .loginSection fieldset {
     padding: 1em;
+    margin-bottom: 2em;
 }
 
+/*Styling for content of login and register tabs*/
 .tabContent {
     text-align: right;
 }
 
+/*Login/register submission button styling*/
 button, .newusersubmission, .loginsubmission {
     background-color: darkgray;
     color: black;
@@ -51,45 +60,16 @@ button, .newusersubmission, .loginsubmission {
     margin: 1%;
 }
 
+/*Additional styling when hovering over buttons*/
 button:hover, .newusersubmission:hover, .loginsubmission:hover {
     background-color: white;
     color: black;
 }
 
+/*Each individual input style*/
 #user, #password, #newpass, #newuser {
     width: 70%;
-}
-
-#user {
     margin-top: 1em;
     margin-bottom: 1em;
 }
 
-#password {
-    margin-top: 1em;
-    margin-bottom: 1em;
-}
-
-#newuser {
-    margin-top: 1em;
-    margin-bottom: 1em;
-}
-
-#newpass {
-    margin-top: 1em;
-    margin-bottom: 1em;
-}
-
-/*All styling for footer on each page*/
-.footer {
-    
-}
-
-/*CSS for entire website*/
-body {
-    background-color: black;
-    font-family: 'Gugi', cursive;
-    color: white;
-    margin: 0;
-    padding: 0;
-}
