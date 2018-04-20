@@ -1,6 +1,15 @@
 /*All styling for header on each page*/
 .header {
-    
+    max-width: 100%;
+    top: 0;
+    width: auto;
+    margin: 0;
+}
+
+.headerBackground {
+    width: 100%;
+    height: 100%;
+    float: top;
 }
 
 /*All styling for main on each page*/
@@ -11,4 +20,12 @@
 /*All styling for footer on each page*/
 .footer {
     
+}
+
+body {
+    background-color: black;
+    font-family: 'Gugi', cursive;
+    color: white;
+    margin: 0;
+    padding: 0;
 }
