@@ -44,5 +44,6 @@ public class Login extends HttpServlet {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
+        //
     }
 }

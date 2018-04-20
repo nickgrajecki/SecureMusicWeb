@@ -27,4 +27,5 @@ public class Verified extends HttpServlet {
         out.println("Welcome!");
         response.sendRedirect("http://www.google.co.uk");
     }
+    //
 }

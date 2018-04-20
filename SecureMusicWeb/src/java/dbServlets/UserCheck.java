@@ -40,5 +40,6 @@ public class UserCheck extends HttpServlet {
         } catch (ClassNotFoundException | SQLException e) {
         }
         return verified;
+        //
     }
 }
