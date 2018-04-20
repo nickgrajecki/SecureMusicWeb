@@ -8,13 +8,6 @@ body {
 }
 
 /*All styling for header on each page*/
-.header {
-    max-width: 100%;
-    top: 0;
-    width: auto;
-    margin: 0;
-}
-
 .headerBackground {
     width: 100%;
     height: 100%;
@@ -22,11 +15,24 @@ body {
 }
 
 .header h1 {
-    position: absolute;
-    margin-top: 22%;
-    left: 25%;
-    right: 25%;
+    display: inline;
     font-size: 1000%;
+}
+
+.header {
+    max-width: 100%;
+    top: 0;
+    width: auto;
+    margin: 0;
+    display: inline;
+    position: absolute;
+    margin-top: 19%;
+    left: 20%;
+    right: 20%;
+}
+
+.logo {
+    margin-right: 2.5em;
 }
 
 /*Styling for navigation bar*/

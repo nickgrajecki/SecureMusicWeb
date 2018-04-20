@@ -18,9 +18,9 @@
 
         <!--header div containing title, logo, and background image-->
         <div class="header">
-            <h1 class="title1">SECURE</h1>
-            <img class="logo" src="logo.jpg" alt="logo">
-            <h1 class="title2"> MUSIC</h1>
+            <h1>SECURE </h1>
+            <img class="logo" src="images\logo.png" alt="logo">
+            <h1>MUSIC</h1>
             <h3 class="tagline"></h3>
         </div>
 
@@ -67,6 +67,7 @@
                         <h3>Create your username and password</h3>
                         <!--Form only allows certain characters to be entered-->
                         <label>Username: </label><input type="text" pattern="\w+" name="newusername" id="newuser" required onclick = hideSetPassword()><br/>
+                        <label>Email: </label><input type="text" pattern="[a-zA-Z0-9-_.@]" name="email" id="email" required><br/>
                         <label>Password: </label><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="newpassword" id="newpass" onclick = setPassword()><br/>
                         <div id="passwordReminder">
                             <p>Password must contain at least:</p>
