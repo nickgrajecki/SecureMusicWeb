@@ -12,6 +12,10 @@
     float: top;
 }
 
+.navigationBar li {
+    display: inline;
+}
+
 /*All styling for main on each page*/
 .main {
     
