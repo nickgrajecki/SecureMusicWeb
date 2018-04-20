@@ -23,17 +23,25 @@
 }
 
 .loginSection {
-    width: 15%;
+    width: 16%;
     float: right;
     border: 2px solid white;
     padding-left: 3em;
     padding-right: 3em;
     padding-top: 1em;
     padding-bottom: 1em;
-    margin-right: 2em;
+    margin-right: 1em;
 }
 
-button {
+.loginSection fieldset {
+    padding: 1em;
+}
+
+.tabContent {
+    text-align: right;
+}
+
+button, .newusersubmission, .loginsubmission {
     background-color: darkgray;
     color: black;
     border: 2px solid white;
@@ -43,9 +51,13 @@ button {
     margin: 1%;
 }
 
-button:hover {
+button:hover, .newusersubmission:hover, .loginsubmission:hover {
     background-color: white;
     color: black;
+}
+
+#user, #password, #newpass, #newuser {
+    width: 70%;
 }
 
 #user {
