@@ -32,6 +32,7 @@ public class Register extends HttpServlet {
 
         String regName = request.getParameter("newusername");
         String regPass = request.getParameter("newpassword");
+        String regEmail = request.getParameter("email");
         String dbName, dbPassword, cmpHost, dbURL;
         try {
            Class.forName("org.postgresql.Driver");
@@ -44,7 +45,7 @@ public class Register extends HttpServlet {
             String SQL1 = "SET search_path TO musicweb";
             Statement stmt = connection.createStatement();
             stmt.executeUpdate(SQL1);
-            String SQL2 = "INSERT INTO dbuser VALUES ('"+ regName +"', '"+ regPass +"')";
+            String SQL2 = "INSERT INTO dbuser VALUES ('"+ regName +"', '"+ regPass +"', '"+ regEmail +"')";
             stmt.executeUpdate(SQL2);
 //            PreparedStatement ps = connection.prepareStatement(SQL2);
 //            ps.setString(1, regName);
