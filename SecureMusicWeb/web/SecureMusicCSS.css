@@ -19,6 +19,15 @@ body {
     font-size: 1000%;
 }
 
+.tagline {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 150%;
+    margin-top: 0;
+    padding-top: 0;
+}
+
 .header {
     max-width: 100%;
     top: 0;
@@ -27,8 +36,8 @@ body {
     display: inline;
     position: absolute;
     margin-top: 19%;
-    left: 20%;
-    right: 20%;
+    left: 25%;
+    right: 25%;
 }
 
 .logo {
@@ -36,9 +45,31 @@ body {
 }
 
 /*Styling for navigation bar*/
+.nav {
+    position: absolute;
+    width: auto;
+    padding-top: 1.5em;
+}
+
+.nav a {
+    text-decoration: none;
+    color: black;
+    font-size: 140%;
+}
+
+.nav a:hover {
+    color: white;
+}
+
+.navigationBar {
+    width: 100%;
+}
+
 .navigationBar li {
     display: inline;
     margin-left: 10em;
+    font-size: x-large;
+
 }
 
 /*Styling for login section*/
@@ -112,4 +143,42 @@ button:hover, .newusersubmission:hover, .loginsubmission:hover {
 
 #passwordList {
     list-style-type: none;
+}
+
+/*Main CSS*/
+.forumDirectory {
+    padding-left: 3em;
+    padding-top: 2em;
+}
+
+/*Footer CSS*/
+.footer {
+    position: relative;
+    width: 100%;
+}
+
+.footer ul {
+    list-style: none;
+}
+
+.footer a, .footerLinks {
+    text-decoration: none;
+    color: white;
+}
+
+.footer a:hover {
+    color: gray;
+}
+
+footer a:visited {
+    text-decoration: none;
+}
+
+.footerLinks, .contactLinks, .socialMedia {
+    display: inline-block;
+}
+
+.footerLinks, .contactLinks {
+    float: right;
+    right: 0;
 }

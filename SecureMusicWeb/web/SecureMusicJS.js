@@ -1,21 +1,21 @@
 //Brings up login options when clicking 'login'
 function switchToLogin() {
-    
+
     document.getElementById('register').style.display = 'none';
     document.getElementById('login').style.display = 'block';
     document.getElementById('log').style.cssText = 'background-color: white';
     document.getElementById('reg').style.cssText = 'background-color: dark-gray';
-    
+
 }
 
 //Brings up register options when clicking 'register'
 function switchToRegister() {
-    
+
     document.getElementById('login').style.display = 'none';
     document.getElementById('register').style.display = 'block';
     document.getElementById('reg').style.cssText = 'background-color: white';
     document.getElementById('log').style.cssText = 'background-color: dark-gray';
-    
+
 }
 
 //How the webpage appears upon load in
@@ -34,13 +34,3 @@ function setPassword() {
 function hideSetPassword() {
     document.getElementById('passwordReminder').style.display = 'none';
 }
-
-//function noUserDisplay() {
-//    if(document.getElementById("user").value == null)
-//        return true;
-//    else if (document.getElementById("pass").value == null)
-//        return true;
-//    else
-//        document.getElementById("error").innerHTML = "Username or Password is incorrect"
-//        return false;
-//}
