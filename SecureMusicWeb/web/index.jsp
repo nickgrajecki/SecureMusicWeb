@@ -59,6 +59,7 @@
                         <label>Username: </label><input type="text" pattern="\w+" name="username" id="user" placeholder="Enter Username" required><br/>
                         <label>Password: </label><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="pass" placeholder="Enter Password" id="password"><br/>
                         <p><a href="reset.html">Forgotten Password?</a></p>
+                        ${invalidMessage}
                         <input class="loginsubmission" type="submit" value="Login" />
                     </fieldset>
                 </form>
