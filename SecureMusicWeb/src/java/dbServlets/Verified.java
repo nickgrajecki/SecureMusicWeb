@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author uhv14amu
  */
-@WebServlet(name = "Verified", urlPatterns = {"/Verified"})
+@WebServlet(urlPatterns = {"/Verified"})
 public class Verified extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -25,5 +25,6 @@ public class Verified extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         out.println("Welcome!");
+        response.sendRedirect("http://www.google.co.uk");
     }
 }
