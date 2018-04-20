@@ -37,9 +37,11 @@ public class Login extends HttpServlet {
             if (UserCheck.verifyUser(logName, logPass)) {
                 RequestDispatcher rs = request.getRequestDispatcher("Verified");
                 rs.forward(request, response);
-            } else {
-                RequestDispatcher rs = request.getRequestDispatcher("index.html");
-                rs.include(request, response);
+            } else {               
+                request.setAttribute("invalidMessage", "Password or username invalid"); // Will be available as ${message}
+                request.getRequestDispatcher("index.jsp").forward(request, response);
+//                RequestDispatcher rs = request.getRequestDispatcher("index.jsp");
+//                rs.include(request, response);
             }
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
