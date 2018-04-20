@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "Register", urlPatterns = {"/Register"})
+@WebServlet(urlPatterns = {"/Register"})
 public class Register extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -44,10 +44,12 @@ public class Register extends HttpServlet {
             String SQL1 = "SET search_path TO musicweb";
             Statement stmt = connection.createStatement();
             stmt.executeUpdate(SQL1);
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO dbuser VALUES ('?', '?')");
-            ps.setString(1, regName);
-            ps.setString(2, regPass);
-            ps.executeUpdate();
+            String SQL2 = "INSERT INTO dbuser VALUES ('"+ regName +"', '"+ regPass +"')";
+            stmt.executeUpdate(SQL2);
+//            PreparedStatement ps = connection.prepareStatement(SQL2);
+//            ps.setString(1, regName);
+//            ps.setString(2, regPass);
+//            ps.executeUpdate(SQL2);
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }

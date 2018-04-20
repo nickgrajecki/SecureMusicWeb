@@ -37,7 +37,6 @@ public class Login extends HttpServlet {
                 RequestDispatcher rs = request.getRequestDispatcher("Verified");
                 rs.forward(request, response);
             } else {
-                out.println("Username or password incorrect");
                 RequestDispatcher rs = request.getRequestDispatcher("index.html");
                 rs.include(request, response);
             }
