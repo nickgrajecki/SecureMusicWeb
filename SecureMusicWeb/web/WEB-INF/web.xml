@@ -11,7 +11,7 @@ and open the template in the editor.
             <servlet-class>Login</servlet-class>
         </servlet>
         <servlet>
-            <servlet-name>Verified</servlet-name>
+            <servlet-name>verified</servlet-name>
             <servlet-class>Verified</servlet-class>
         </servlet>
         <servlet-mapping>
@@ -19,7 +19,7 @@ and open the template in the editor.
             <url-pattern>/login</url-pattern>
         </servlet-mapping>
         <servlet-mapping>
-            <servlet-name>Verified</servlet-name>
-            <url-pattern>/Verified</url-pattern>
+            <servlet-name>verified</servlet-name>
+            <url-pattern>/verified</url-pattern>
         </servlet-mapping>
 </web-app>
