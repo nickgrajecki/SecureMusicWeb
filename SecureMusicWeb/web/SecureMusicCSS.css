@@ -170,7 +170,7 @@ button:hover, .newusersubmission:hover, .loginsubmission:hover {
     color: gray;
 }
 
-footer a:visited {
+a:visited {
     text-decoration: none;
 }
 
@@ -181,4 +181,21 @@ footer a:visited {
 .footerLinks, .contactLinks {
     float: right;
     right: 0;
+}
+
+.loginSection a:visited {
+    text-decoration: none;
+}
+
+p {
+    text-decoration: none;
+}
+
+.loginSection fieldset a {
+    text-decoration: none;
+    color: white;
+}
+
+.loginSection fieldset a:hover {
+    color: darkgray;
 }
