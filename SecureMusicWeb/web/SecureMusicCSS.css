@@ -100,7 +100,7 @@ button:hover, .newusersubmission:hover, .loginsubmission:hover {
 }
 
 /*Each individual input style*/
-#user, #password, #newpass, #newuser {
+#user, #password, #newpass, #newuser, #email {
     width: 70%;
     margin-top: 1em;
     margin-bottom: 1em;

@@ -54,8 +54,8 @@
                     <fieldset>
                         <h3>Enter your username and password</h3>
                         <!--Form only allows certain characters to be entered-->
-                        <label>Username: </label><input type="text" pattern="\w+" name="username" id="user" required><br/>
-                        <label>Password: </label><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="pass" id="password"><br/>
+                        <label>Username: </label><input type="text" pattern="\w+" name="username" id="user" placeholder="Enter Username" required><br/>
+                        <label>Password: </label><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="pass" placeholder="Enter Password" id="password"><br/>
                         <p>Forgotten Password?</p>
                         <input class="loginsubmission" type="submit" value="Login" />
                     </fieldset>
@@ -66,9 +66,9 @@
                     <fieldset>
                         <h3>Create your username and password</h3>
                         <!--Form only allows certain characters to be entered-->
-                        <label>Username: </label><input type="text" pattern="\w+" name="newusername" id="newuser" required onclick = hideSetPassword()><br/>
-                        <label>Email: </label><input type="text" pattern="[a-zA-Z0-9-_.@]" name="email" id="email" required><br/>
-                        <label>Password: </label><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="newpassword" id="newpass" onclick = setPassword()><br/>
+                        <label>Username: </label><input type="text" pattern="\w+" name="newusername" id="newuser" placeholder="Enter Username" required onclick = hideSetPassword()><br/>
+                        <label>Email: </label><input type="text" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}" name="email" placeholder="nickgrajecki@compuserve.com" id="email" required><br/>
+                        <label>Password: </label><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="newpassword" placeholder="Enter Password" id="newpass" onclick = setPassword()><br/>
                         <div id="passwordReminder">
                             <p>Password must contain at least:</p>
                             <ul id="passwordList">
