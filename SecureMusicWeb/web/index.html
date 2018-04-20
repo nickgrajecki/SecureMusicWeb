@@ -9,6 +9,7 @@
         <!--StyleSheets-->
         <link rel="stylesheet" type="text/css" href="SecureMusicCSS.css" />
         <link href="https://fonts.googleapis.com/css?family=Gugi" rel="stylesheet">
+        <script type="text/javascript" src="SecureMusicJS.js"></script>
     </head>
 
     <body>
@@ -32,16 +33,33 @@
         </div>
 
         <div class="main">
-            
+
             <!--Login form requiring username and password-->
             <div class="login">
-                <form method="post" action="login">
-                    Username:<input type="text" name="username" /><br/>
-                    Password:<input type="text" name="pass" /><br/>
-                    <input type="submit" value="login" />
+                <div class="loginTab">
+                    <button id="log" onclick="switchToLogin()"> Login </button>
+                    <button id="reg" onclick="switchToRegister()"> Register </button>
+                </div>
+
+                <form id="login" class="tabContent" method="post" action="login">
+                    <fieldset>
+                        <legend>Enter your username and password</legend>
+                        <label>Username: </label><input type="text" name="username" id="user" required><br/>
+                        <label>Password: </label><input type="password" name="pass" id="password" required><br/>
+                        <input class="loginsubmission" type="submit" value="login" />
+                    </fieldset>
+                </form>
+
+                <form id="register" class="tabContent" method="post" action="register">
+                    <fieldset>
+                        <legend>Create your username and password</legend>
+                        <label>Username: </label><input type="text" name="newusername" id="newuser" required><br/>
+                        <label>Password: </label><input type="password" name="newpassword" id="newpass" required><br/>
+                        <input class="newusersubmission" type="submit" value="login" />
+                    </fieldset>
                 </form>
             </div>
-            
+
             <div class="forumDirectory">
 
             </div>

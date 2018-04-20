@@ -14,11 +14,33 @@
 
 .navigationBar li {
     display: inline;
+    margin-left: 10em;
 }
 
 /*All styling for main on each page*/
 .main {
     
+}
+
+.login {
+    width: 10%;
+    float: right;
+    border: 2px solid white;
+    padding-left: 3em;
+    padding-right: 3em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    margin-right: 2em;
+}
+
+#user {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+#password {
+    margin-top: 1em;
+    margin-bottom: 1em;
 }
 
 /*All styling for footer on each page*/
