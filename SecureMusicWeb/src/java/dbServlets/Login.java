@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.mail.*;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -32,12 +33,16 @@ public class Login extends HttpServlet {
 
         String logName = request.getParameter("username");
         String logPass = request.getParameter("pass");
+        HttpSession session = request.getSession();
 
         try {
             if (UserCheck.verifyUser(logName, logPass)) {
                 RequestDispatcher rs = request.getRequestDispatcher("Verified");
                 rs.forward(request, response);
-            } else {               
+                session.setAttribute("username", logName);
+                request.setAttribute("username", logName);
+                session.setAttribute("isLoggedIn", true);
+            } else {
                 request.setAttribute("invalidMessage", "Password or username invalid"); // Will be available as ${message}
                 request.getRequestDispatcher("index.jsp").forward(request, response);
 //                RequestDispatcher rs = request.getRequestDispatcher("index.jsp");

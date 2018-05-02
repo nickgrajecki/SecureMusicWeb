@@ -6,7 +6,12 @@
 package dbServlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,17 +20,16 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author uhv14amu
+ * @author Nick
  */
-@WebServlet(urlPatterns = {"/Verified"})
-public class Verified extends HttpServlet {
+@WebServlet(name = "ReadComment", urlPatterns = {"/ReadComment"})
+public class ReadComment extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        out.println("Welcome!");
-        response.sendRedirect("index.jsp");
+        
+        String textComment = request.getParameter("comment");
+        
     }
-    //
 }

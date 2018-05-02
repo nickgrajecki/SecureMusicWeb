@@ -1,3 +1,8 @@
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.Connection"%>
 <!DOCTYPE html>
 <html>
 
@@ -19,7 +24,7 @@
         <!--nav div containing links to all pages-->
         <div class="nav">
             <ul class="navigationBar">
-                <li><a href="index.html">Home</a></li>
+                <li><a href="index.jsp">Home</a></li>
                 <li><a href="blog.html">Blog</a></li>
                 <li><a href="news.html">News</a></li>
                 <li><a href="loginregister.html">Login/Register</a></li>
@@ -44,6 +49,8 @@
 
             <!--Login form requiring username and password-->
             <div class="loginSection">
+                <!--Checks if user is logged in - if he isnt, run code under-->
+                <% if ((session.getAttribute("isLoggedIn") == null)) { %>
 
                 <!--Uses Javascript to swap between login and register tabs-->
                 <div class="loginRegister">
@@ -85,48 +92,102 @@
                     </fieldset>
                 </form>
 
-            </div>
+            </div> 
+            <!--Checks if user is logged in - if so, run code under-->
+            <% } else {%>
+            > Welcome, ${username}!</div>
+            <% }%>
 
-            <!--div containing forum directory in the form of links-->
-            <div class="forumDirectory">
-                <h1>WHAT'S ON?</h1>
-                <h1>TRENDING TOPICS</h1>
-                <h1>BUSINESS NEWS</h1>
+        <!--div containing forum directory in the form of links-->
+        <div class="forumDirectory">
+            <h1>WHAT'S ON?</h1>
+            <h1>TRENDING TOPICS</h1>
+            <h1>BUSINESS NEWS</h1>
+        </div>
+        <!-- Checks if logged in, if not, displays message, otherwise shows posts and allows to make new one --> 
+        <div class="blogs">
+            <% if ((session.getAttribute("isLoggedIn") == null)) { %>
+            Please log in or register to view or create new blog posts
+            <% } else {%>
+            Please click HERE to create a new blog post.
+            <form id ="blogSubmit" method="post" action="PostBlog">
+                <h3>Create your blog post</h3>
+                <!--Form only allows certain characters to be entered-->
+                <label>Blog title: </label><input type="text" pattern="\w+" name="blogtitle" id="blogtitle" placeholder="Enter Blog Title"><br/>
+                <label>Content: </label><input type="text" name="blogcontent" placeholder="Enter your content here" id="blogcontent" required><br/>
+                <input class="newblogsubmission" type="submit" value="Post" />
+            </form>
+            <div>
+                <table>
+                <%
+                    try {
+                        Class.forName("org.postgresql.Driver");
+                        String dbName, dbPassword, cmpHost, dbURL;
+                        dbName = "groupcz";
+                        dbPassword = "groupcz";
+                        cmpHost = "cmpstudb-02.cmp.uea.ac.uk";
+                        dbURL = ("jdbc:postgresql://" + cmpHost + "/" + dbName);
+                        Connection connection = DriverManager.getConnection(dbURL, dbName, dbPassword);
+                        Statement stmt = connection.createStatement();
+                        String SQL1 = "SET search_path TO musicweb";
+                        stmt.executeUpdate(SQL1);
+                        String SQL2 = "SELECT * FROM blogs";
+                        ResultSet rs = stmt.executeQuery(SQL2);
+                        while (rs.next()) {
+
+                %>
+                <tr>
+                    <td><%=rs.getString("title")%></td>
+                    <td><%=rs.getString("username")%></td>
+                    <td><%=rs.getString("content")%></td><br>
+                </tr>
+                <%
+                    }
+                %>
+                </table>
+                <%
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                %>
             </div>
+            <% }%>
         </div>
 
-        <!--contains footer information, i.e.pages, social media links, contact-->
-        <div class="footer">
+    </div>
 
-            <div class="socialMedia">
-                <img id="facebook" src="fb.jpg" alt="Facebook Link">
-                <img id="twitter" src="twitter.jpg" alt="Twitter Link">
-                <img id="pinterest" src="pin.jpg" alt="Pinterest Link">
-                <img id="tumblr" src="tumblr.jpg" alt="Tumblr Link">
-                <img id="linkedIn" src="linked.jpg" alt="LinkedIn Link">
-            </div>
+    <!--contains footer information, i.e.pages, social media links, contact-->
+    <div class="footer">
 
-            <div class="footerLinks">
-                <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="blog.html">Blog</a></li>
-                    <li><a href="news.html">News</a></li>
-                    <li><a href="loginregister.html">Login/Register</a></li>
-                    <li><a href="profile.html">Profile</a></li>
-                    <li><a href="contact.html">Contact Us</a></li>
-                </ul>
-            </div>
-
-            <div class="contactLinks">
-                <ul>
-                    <li>Phone</li>
-                    <li>Email</li>
-                    <li>Address</li>
-                </ul>
-            </div>
-
+        <div class="socialMedia">
+            <img id="facebook" src="fb.jpg" alt="Facebook Link">
+            <img id="twitter" src="twitter.jpg" alt="Twitter Link">
+            <img id="pinterest" src="pin.jpg" alt="Pinterest Link">
+            <img id="tumblr" src="tumblr.jpg" alt="Tumblr Link">
+            <img id="linkedIn" src="linked.jpg" alt="LinkedIn Link">
         </div>
 
-    </body>
+        <div class="footerLinks">
+            <ul>
+                <li><a href="index.jsp">Home</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="news.html">News</a></li>
+                <li><a href="loginregister.html">Login/Register</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+        </div>
+
+        <div class="contactLinks">
+            <ul>
+                <li>Phone</li>
+                <li>Email</li>
+                <li>Address</li>
+            </ul>
+        </div>
+
+    </div>
+
+</body>
 
 </html>
