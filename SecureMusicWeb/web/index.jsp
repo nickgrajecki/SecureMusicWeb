@@ -95,7 +95,11 @@
             </div> 
             <!--Checks if user is logged in - if so, run code under-->
             <% } else {%>
-            > Welcome, ${username}!</div>
+            > Welcome, ${username}!<br>
+            <form action="Logout" method="post">
+                <button type="submit" name="logout" value="logout" class="btn-link">Log out</button>
+            </form>
+            </div>
             <% }%>
 
         <!--div containing forum directory in the form of links-->
@@ -113,37 +117,41 @@
             <form id ="blogSubmit" method="post" action="PostBlog">
                 <h3>Create your blog post</h3>
                 <!--Form only allows certain characters to be entered-->
-                <label>Blog title: </label><input type="text" pattern="\w+" name="blogtitle" id="blogtitle" placeholder="Enter Blog Title"><br/>
+                <label>Blog title: </label><input type="text" name="blogtitle" id="blogtitle" placeholder="Enter Blog Title"><br/>
                 <label>Content: </label><input type="text" name="blogcontent" placeholder="Enter your content here" id="blogcontent" required><br/>
                 <input class="newblogsubmission" type="submit" value="Post" />
             </form>
             <div>
                 <table>
-                <%
-                    try {
-                        Class.forName("org.postgresql.Driver");
-                        String dbName, dbPassword, cmpHost, dbURL;
-                        dbName = "groupcz";
-                        dbPassword = "groupcz";
-                        cmpHost = "cmpstudb-02.cmp.uea.ac.uk";
-                        dbURL = ("jdbc:postgresql://" + cmpHost + "/" + dbName);
-                        Connection connection = DriverManager.getConnection(dbURL, dbName, dbPassword);
-                        Statement stmt = connection.createStatement();
-                        String SQL1 = "SET search_path TO musicweb";
-                        stmt.executeUpdate(SQL1);
-                        String SQL2 = "SELECT * FROM blogs";
-                        ResultSet rs = stmt.executeQuery(SQL2);
-                        while (rs.next()) {
+                    <tr>
+                        <td><b>Title</b></td>
+                        <td><b>Author</b></td>
+                        <td><b>Content</b></td>
+                    </tr>
+                    <%
+                        try {
+                            Class.forName("org.postgresql.Driver");
+                            String dbName, dbPassword, cmpHost, dbURL;
+                            dbName = "groupcz";
+                            dbPassword = "groupcz";
+                            cmpHost = "cmpstudb-02.cmp.uea.ac.uk";
+                            dbURL = ("jdbc:postgresql://" + cmpHost + "/" + dbName);
+                            Connection connection = DriverManager.getConnection(dbURL, dbName, dbPassword);
+                            Statement stmt = connection.createStatement();
+                            String SQL1 = "SET search_path TO musicweb";
+                            stmt.executeUpdate(SQL1);
+                            String SQL2 = "SELECT * FROM blogs";
+                            ResultSet rs = stmt.executeQuery(SQL2);
+                            while (rs.next()) {
 
-                %>
-                <tr>
-                    <td><%=rs.getString("title")%></td>
-                    <td><%=rs.getString("username")%></td>
-                    <td><%=rs.getString("content")%></td><br>
-                </tr>
-                <%
-                    }
-                %>
+                    %>
+                    <tr>
+                        <td><%=rs.getString("title")%></td>
+                        <td><%=rs.getString("username")%></td>
+                        <td><%=rs.getString("content")%></td></tr><br>
+                        <%
+                            }
+                        %>
                 </table>
                 <%
                     } catch (Exception e) {
@@ -155,7 +163,7 @@
         </div>
 
     </div>
-
+    <br>
     <!--contains footer information, i.e.pages, social media links, contact-->
     <div class="footer">
 

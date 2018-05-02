@@ -6,30 +6,29 @@
 package dbServlets;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Nick
  */
-@WebServlet(name = "ReadComment", urlPatterns = {"/ReadComment"})
-public class ReadComment extends HttpServlet {
+@WebServlet(name = "Logout", urlPatterns = {"/Logout"})
+public class Logout extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
-        String textComment = request.getParameter("comment");
-        
+        HttpSession session = request.getSession();
+        try {
+            session.removeAttribute("isLoggedIn");
+            session.invalidate();
+            response.sendRedirect("index.jsp");
+        } catch (IOException E) {}
     }
 }
