@@ -99,6 +99,9 @@
             <form action="Logout" method="post">
                 <button type="submit" name="logout" value="logout" class="btn-link">Log out</button>
             </form>
+            <form action="profile.jsp" method="post">
+                <button type="submit" name="profile" value="profile" class="btn-link">Profile</button>
+            </form>
             </div>
             <% }%>
 
