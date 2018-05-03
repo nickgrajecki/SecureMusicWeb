@@ -64,8 +64,11 @@ public class Email extends HttpServlet {
             ps.setString(2, resetEmail);
             ResultSet rs = ps.executeQuery();
             found = rs.next();
-            String SQL2 = "UPDATE dbuser SET password = '" + newPass + "' WHERE username = '" + resetUser + "'";
-            stmt.executeUpdate(SQL2);
+
+            ps = connection.prepareStatement("UPDATE dbuser SET password = ? WHERE username = ?");
+            ps.setString(1, newPass);
+            ps.setString(2, resetUser);
+            ps.executeUpdate();
         } catch (ClassNotFoundException | SQLException e) {
         }
         if (found) {

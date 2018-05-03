@@ -8,6 +8,7 @@ package dbServlets;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
@@ -40,12 +41,12 @@ public class Register extends HttpServlet {
             String SQL1 = "SET search_path TO musicweb";
             Statement stmt = connection.createStatement();
             stmt.executeUpdate(SQL1);
-            String SQL2 = "INSERT INTO dbuser VALUES ('" + regName + "', '" + regPass + "', '" + regEmail + "')";
-            stmt.executeUpdate(SQL2);
-//            PreparedStatement ps = connection.prepareStatement(SQL2);
-//            ps.setString(1, regName);
-//            ps.setString(2, regPass);
-//            ps.executeUpdate(SQL2);
+            
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO dbuser VALUES (?, ?, ?)");
+            ps.setString(1, regName);
+            ps.setString(2, regPass);
+            ps.setString(3, regEmail);
+            ps.executeUpdate();
             response.sendRedirect("index.jsp");
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);

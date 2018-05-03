@@ -47,11 +47,17 @@ public class PostBlog extends HttpServlet {
                 String SQL1 = "SET search_path TO musicweb";
                 Statement stmt = connection.createStatement();
                 stmt.executeUpdate(SQL1);
-                String SQL2 = "INSERT INTO blogs (username, content, title) VALUES ('" + username + "', '" + blogContent + "', '" + blogTitle + "')";
-                stmt.executeUpdate(SQL2);
+                
+                String SQL2 = "INSERT INTO blogs (username, content, title) VALUES (?, ?, ?)";
+                PreparedStatement ps = connection.prepareStatement(SQL2);
+                ps.setString(1, username);
+                ps.setString(2, blogContent);
+                ps.setString(3, blogTitle);
+                ps.executeUpdate();
+                response.sendRedirect("index.jsp");
             } catch (ClassNotFoundException | SQLException e) {
             }
-            response.sendRedirect("index.jsp");
+            
         }
     }
 }
