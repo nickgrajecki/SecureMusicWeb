@@ -19,17 +19,17 @@
         <script type="text/javascript" src="SecureMusicJS.js"></script>
     </head>
 
-    <body onload='scrollFade();'>
+    <body onload='scrollFade();' onload='showSlides();'>
 
         <!--nav div containing links to all pages-->
         <div class="nav">
             <ul class="navigationBar">
-                <li><a href="index.jsp">Home</a></li>
-                <li><a href="blog.html">Blog</a></li>
-                <li><a href="news.html">News</a></li>
-                <li><a href="loginregister.html">Login/Register</a></li>
-                <li><a href="profile.jsp">Profile</a></li>
-                <li><a href="contact.html">Contact Us</a></li>
+                <li id='navli'><a href="index.jsp">Home</a></li>
+                <li id='navli'><a href="blog.html">Blog</a></li>
+                <li id='navli'><a href="news.html">News</a></li>
+                <li id='navli'><a href="loginregister.html">Login/Register</a></li>
+                <li id='navli'><a href="profile.jsp">Profile</a></li>
+                <li id='navli'><a href="contact.html">Contact Us</a></li>
             </ul>
         </div>
 
@@ -93,6 +93,56 @@
                 </form>
 
             </div> 
+
+            <div class="forumDirectory">
+                <h1>WHAT'S ON?</h1>
+
+
+                <div class="newsSlideshow">
+                    <div class="newsFade" id='fade1'>
+                        <div class="number"></div>
+                        <img src="images\Concert1.png">
+                        <div class="text">Lotus Festival (2017)</div>
+                    </div>
+
+                    <div class="newsFade">
+                        <div class="number"></div>
+                        <img src="images\Preview1.png">
+                        <div class="text">One industry expert's opinion on rising in the ranks.</div>
+                    </div>
+
+                    <div class="newsFade">
+                        <div class="number"></div>
+                        <img src="images\Preview2.png">
+                        <div class="text">Pitch perfection: mixing secrets of the Gods.</div>
+                    </div>
+
+                    <a class="previous" onlick="plusSlides(-1)">&#10094;</a>
+                    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+                </div>
+
+                <div style="text-align:center">
+                    <span class="dot" onclick="currentSlide(1)"></span> 
+                    <span class="dot" onclick="currentSlide(2)"></span> 
+                    <span class="dot" onclick="currentSlide(3)"></span> 
+                </div>
+
+                <h1>TRENDING TOPICS</h1>
+                
+                <div class="trend">
+                <img src="images\Concert1.png" />
+                <img src="images\Preview1.png" />
+                <img src="images\Preview2.png" />
+                </div>
+
+                <h1>MICROBLOG</h1>
+                <div class="microblog">
+                    
+                </div>
+
+            </div>
+
             <!--Checks if user is logged in - if so, run code under-->
             <% } else {%>
             > Welcome, ${username}!<br>
@@ -102,15 +152,11 @@
             <form action="profile.jsp" method="post">
                 <button type="submit" name="profile" value="profile" class="btn-link">Profile</button>
             </form>
-            </div>
-            <% }%>
+        </div>
+        <% }%>
 
         <!--div containing forum directory in the form of links-->
-        <div class="forumDirectory">
-            <h1>WHAT'S ON?</h1>
-            <h1>TRENDING TOPICS</h1>
-            <h1>BUSINESS NEWS</h1>
-        </div>
+
         <!-- Checks if logged in, if not, displays message, otherwise shows posts and allows to make new one --> 
         <div class="blogs">
             <% if ((session.getAttribute("isLoggedIn") == null)) { %>

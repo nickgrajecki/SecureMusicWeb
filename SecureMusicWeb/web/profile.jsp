@@ -41,45 +41,45 @@
         -----------------------<br>        
         <!-- Insert form to change password -->
         Your posts:
-         <table>
-                    <tr>
-                        <td><b>Title</b></td>
-                        <td><b>Author</b></td>
-                        <td><b>Content</b></td>
-                    </tr>
-        <%
-                        try {
-                            Class.forName("org.postgresql.Driver");
-                            String dbName, dbPassword, cmpHost, dbURL;
-                            dbName = "groupcz";
-                            dbPassword = "groupcz";
-                            cmpHost = "cmpstudb-02.cmp.uea.ac.uk";
-                            dbURL = ("jdbc:postgresql://" + cmpHost + "/" + dbName);
-                            Connection connection = DriverManager.getConnection(dbURL, dbName, dbPassword);
-                            Statement stmt = connection.createStatement();
-                            String SQL1 = "SET search_path TO musicweb";
-                            stmt.executeUpdate(SQL1);
-                            String username = session.getAttribute("username").toString();
-                            String SQL2 = "SELECT * FROM blogs WHERE username = '"+username+"'";
-                            ResultSet rs = stmt.executeQuery(SQL2);
-                            while (rs.next()) {
+        <table>
+            <tr>
+                <td><b>Title</b></td>
+                <td><b>Author</b></td>
+                <td><b>Content</b></td>
+            </tr>
+            <%
+                try {
+                    Class.forName("org.postgresql.Driver");
+                    String dbName, dbPassword, cmpHost, dbURL;
+                    dbName = "groupcz";
+                    dbPassword = "groupcz";
+                    cmpHost = "cmpstudb-02.cmp.uea.ac.uk";
+                    dbURL = ("jdbc:postgresql://" + cmpHost + "/" + dbName);
+                    Connection connection = DriverManager.getConnection(dbURL, dbName, dbPassword);
+                    Statement stmt = connection.createStatement();
+                    String SQL1 = "SET search_path TO musicweb";
+                    stmt.executeUpdate(SQL1);
+                    String username = session.getAttribute("username").toString();
+                    String SQL2 = "SELECT * FROM blogs WHERE username = '" + username + "'";
+                    ResultSet rs = stmt.executeQuery(SQL2);
+                    while (rs.next()) {
 
-                    %>
-                    <tr>
-                        <td><%=rs.getString("title")%></td>
-                        <td><%=rs.getString("username")%></td>
-                        <td><%=rs.getString("content")%></td></tr><br>
-                        <%
-                            }
-                        %>
-                </table>
+            %>
+            <tr>
+                <td><%=rs.getString("title")%></td>
+                <td><%=rs.getString("username")%></td>
+                <td><%=rs.getString("content")%></td></tr><br>
                 <%
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
                 %>
-            </div>
-            <div class="footer">
+        </table>
+        <%
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        %>
+    </div>
+    <div class="footer">
 
         <div class="socialMedia">
             <p>Social Media Links:</p><br/>
@@ -111,5 +111,5 @@
         </div>
 
     </div>
-    </body>
+</body>
 </html>
