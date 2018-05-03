@@ -16,7 +16,7 @@
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script type="text/javascript" src="SecureMusicJS.js"></script>
     </head>
-    <body>
+    <body onload='scrollFade();'>
         <div class="nav">
             <ul class="navigationBar">
                 <li><a href="index.jsp">Home</a></li>

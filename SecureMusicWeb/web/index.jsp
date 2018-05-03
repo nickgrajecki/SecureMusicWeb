@@ -19,7 +19,7 @@
         <script type="text/javascript" src="SecureMusicJS.js"></script>
     </head>
 
-    <body>
+    <body onload='scrollFade();'>
 
         <!--nav div containing links to all pages-->
         <div class="nav">

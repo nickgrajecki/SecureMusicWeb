@@ -34,3 +34,20 @@ function setPassword() {
 function hideSetPassword() {
     document.getElementById('passwordReminder').style.display = 'none';
 }
+
+//function scrollFade() {
+//    $(window).scroll(function () {
+//        $('slideshowcontainer').css("opacity", 1) - $(window).scrollTop() / 250;
+//    });
+//}
+
+function scrollFade() {
+    var fadeBG = $('.headerBackground');
+
+    $(window).on('scroll', function () {
+        var st = $(this).scrollTop();
+        fadeBG.css({
+            'opacity': 1 - st / 600
+        });
+    });
+}
