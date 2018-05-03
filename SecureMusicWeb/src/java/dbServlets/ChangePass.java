@@ -59,8 +59,10 @@ public class ChangePass extends HttpServlet {
                 String SQL3 = "UPDATE dbuser SET password = '" + newPass + "' WHERE username = '" + username + "'";
                 stmt.executeUpdate(SQL3);
                 request.setAttribute("confirmPassMessage", "Password changed successfully");
+                request.getRequestDispatcher("profile.jsp").forward(request, response);
             } else {
                 request.setAttribute("confirmPassMessage", "Incorrect details - try again");
+                request.getRequestDispatcher("profile.jsp").forward(request, response);
             }
         } catch (ClassNotFoundException | SQLException e) {
         }
