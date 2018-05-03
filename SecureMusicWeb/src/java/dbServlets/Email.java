@@ -7,6 +7,7 @@ package dbServlets;
 
 import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Properties;
 import java.lang.Object;
 import java.sql.Connection;
@@ -93,7 +94,18 @@ public class Email extends HttpServlet {
                         + "\nIf you hadn't requested a password reset, "
                         + "please contact the website administrator.\n\n - SecureMusicWeb");
                 Transport.send(message);
-                System.out.println("Done");
+                try (PrintWriter out = response.getWriter()) {
+                    out.println("<!DOCTYPE html>");
+                    out.println("<html>");
+                    out.println("<head>");
+                    out.println("<meta http-equiv=\"refresh\" content=\"3;url=index.jsp\"/>");
+                    out.println("<title>Password successfully reset</title>");
+                    out.println("</head>");
+                    out.println("<body>");
+                    out.println("<h1>Your password has been reset. If you haven't been automatically redirected, click <a href = \"index.jsp\">here</a></h1>");
+                    out.println("</body>");
+                    out.println("</html>");
+                }
             } catch (MessagingException e) {
                 throw new RuntimeException(e);
             }

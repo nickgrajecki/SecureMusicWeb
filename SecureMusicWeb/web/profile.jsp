@@ -38,6 +38,15 @@
         </div>
         Welcome ${username}!<br>
         Change password below<br>
+           <form id="passchange" class="tabContent" method="post" action="ChangePass">
+                    <fieldset>
+                        <label>Current password: </label><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="currentpass" placeholder="Enter Current Password" id="password"><br/>
+                        <label>New Password: </label><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="newpass" placeholder="Enter New Password" id="password"><br/>
+                        <label>Confirm New Password: </label><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="confirmpass" placeholder="Confirm New Password" id="password"><br/>
+                        <input class="loginsubmission" type="submit" value="Confirm" />
+                        ${confirmPassMessage}
+                    </fieldset>
+                </form>
         -----------------------<br>        
         <!-- Insert form to change password -->
         Your posts:
