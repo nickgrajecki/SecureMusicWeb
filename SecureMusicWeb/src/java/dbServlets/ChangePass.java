@@ -25,10 +25,11 @@ public class ChangePass extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         HttpSession session = request.getSession();
-        //Request data from password change form
         
+        //Set up HTML sanitizers to allow inline formatting and links only
         PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.LINKS);
         
+        //Request data from password change form
         String username = session.getAttribute("username").toString();
         String currentPass = policy.sanitize(request.getParameter("currentpass"));
         String newPass = policy.sanitize(request.getParameter("newpass"));

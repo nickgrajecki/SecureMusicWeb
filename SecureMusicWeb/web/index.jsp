@@ -3,6 +3,8 @@
 <%@page import="java.sql.DriverManager"%>
 <%@page import="java.sql.DriverManager"%>
 <%@page import="java.sql.Connection"%>
+<%@ page import="net.tanesha.recaptcha.ReCaptcha" %>
+<%@ page import="net.tanesha.recaptcha.ReCaptchaFactory" %>
 <!DOCTYPE html>
 <html>
 
@@ -17,6 +19,13 @@
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script type="text/javascript" src="SecureMusicJS.js"></script>
+        <script src='https://www.google.com/recaptcha/api.js'></script>
+        <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=p6szcpxygu55ycfq39yga5wgs2vustj56sthnuidnu5heuja"></script>
+        <script>tinymce.init({
+                selector: 'textarea',
+                width: '480',
+                resize: 'both'});
+        </script>
     </head>
 
     <body onload='scrollFade();' onload='showSlides();'>
@@ -65,6 +74,11 @@
                         <!--Form only allows certain characters to be entered-->
                         <label>Username: </label><input type="text" pattern="\w+" name="username" id="user" placeholder="Enter Username" required><br/>
                         <label>Password: </label><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="pass" placeholder="Enter Password" id="password"><br/>
+                        <%
+                            //ReCaptcha c = ReCaptchaFactory.newReCaptcha("your_public_key", "your_private_key", false);
+                            ReCaptcha captcha = ReCaptchaFactory.newReCaptcha("6LeaQSATAAAAAAiABGbBT69efQWe-FHQG9g_t7u4", "6LeaQSATAAAAANs4YFVJG1RvVPRpwx6bM6jcqzrZ", false);
+                            out.print(captcha.createRecaptchaHtml(null, null));
+                        %>
                         <p><a href="reset.html">Forgotten Password?</a></p>
                         ${invalidMessage}
                         <input class="loginsubmission" type="submit" value="Login" />
@@ -129,16 +143,16 @@
                 </div>
 
                 <h1>TRENDING TOPICS</h1>
-                
+
                 <div class="trend">
-                <img src="images\Concert1.png" />
-                <img src="images\Preview1.png" />
-                <img src="images\Preview2.png" />
+                    <img src="images\Concert1.png" />
+                    <img src="images\Preview1.png" />
+                    <img src="images\Preview2.png" />
                 </div>
 
                 <h1>MICROBLOG</h1>
                 <div class="microblog">
-                    
+
                 </div>
 
             </div>
@@ -167,7 +181,8 @@
                 <h3>Create your blog post</h3>
                 <!--Form only allows certain characters to be entered-->
                 <label>Blog title: </label><input type="text" name="blogtitle" id="blogtitle" placeholder="Enter Blog Title"><br/>
-                <label>Content: </label><input type="text" name="blogcontent" placeholder="Enter your content here" id="blogcontent" required><br/>
+                <textarea type="text" name="blogcontent" placeholder="Enter your content here" id="blogcontent" required cols="40" rows="10"></textarea>
+                <br/>
                 <input class="newblogsubmission" type="submit" value="Post" />
             </form>
             <div>

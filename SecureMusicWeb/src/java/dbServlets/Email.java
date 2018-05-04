@@ -40,6 +40,7 @@ public class Email extends HttpServlet {
         final String username = "securemusicweb@gmail.com";
         final String password = "WenjiaWang2018";
         
+        //Set up HTML sanitizers to allow inline formatting and links only
         PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.LINKS);
 
         String resetUser = policy.sanitize(request.getParameter("username"));

@@ -34,6 +34,8 @@ public class PostBlog extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String dbName, dbPassword, cmpHost, dbURL;
         HttpSession session = request.getSession();
+        
+        //Set up HTML sanitizers to allow inline formatting and links only
         PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.LINKS);
         
         if (session.getAttribute("isLoggedIn") != null) {

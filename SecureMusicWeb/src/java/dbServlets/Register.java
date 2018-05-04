@@ -28,7 +28,9 @@ public class Register extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.LINKS);
+        //Set up HTML sanitizers to allow inline formatting and links only
+        //Source: OWASP Java HTML Sanitizer Project
+        PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.LINKS).and(Sanitizers.TABLES);
 
         String regName = policy.sanitize(request.getParameter("newusername"));
         String regPass = policy.sanitize(request.getParameter("newpassword"));
