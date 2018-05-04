@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.owasp.html.PolicyFactory;
+import org.owasp.html.Sanitizers;
 
 @WebServlet(name = "ChangePass", urlPatterns = {"/ChangePass"})
 public class ChangePass extends HttpServlet {
@@ -21,13 +23,16 @@ public class ChangePass extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
+        
         HttpSession session = request.getSession();
         //Request data from password change form
+        
+        PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.LINKS);
+        
         String username = session.getAttribute("username").toString();
-        String currentPass = request.getParameter("currentpass");
-        String newPass = request.getParameter("newpass");
-        String confirmPass = request.getParameter("confirmpass");
+        String currentPass = policy.sanitize(request.getParameter("currentpass"));
+        String newPass = policy.sanitize(request.getParameter("newpass"));
+        String confirmPass = policy.sanitize(request.getParameter("confirmpass"));
         //Initialise variable to check if passwords match
         boolean passConfirmed = false;
         try {

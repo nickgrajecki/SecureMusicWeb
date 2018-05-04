@@ -29,6 +29,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.owasp.html.PolicyFactory;
+import org.owasp.html.Sanitizers;
 
 @WebServlet(urlPatterns = {"/Email"})
 public class Email extends HttpServlet {
@@ -37,9 +39,11 @@ public class Email extends HttpServlet {
             throws ServletException, IOException {
         final String username = "securemusicweb@gmail.com";
         final String password = "WenjiaWang2018";
+        
+        PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.LINKS);
 
-        String resetUser = request.getParameter("username");
-        String resetEmail = request.getParameter("email");
+        String resetUser = policy.sanitize(request.getParameter("username"));
+        String resetEmail = policy.sanitize(request.getParameter("email"));
 
         UUID randomGen = UUID.randomUUID();
         log("UUID One: " + randomGen);

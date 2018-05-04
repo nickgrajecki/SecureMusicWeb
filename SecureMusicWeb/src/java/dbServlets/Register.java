@@ -18,6 +18,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.owasp.html.PolicyFactory;
+import org.owasp.html.Sanitizers;
 
 @WebServlet(urlPatterns = {"/Register"})
 public class Register extends HttpServlet {
@@ -25,10 +27,12 @@ public class Register extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        
+        PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.LINKS);
 
-        String regName = request.getParameter("newusername");
-        String regPass = request.getParameter("newpassword");
-        String regEmail = request.getParameter("email");
+        String regName = policy.sanitize(request.getParameter("newusername"));
+        String regPass = policy.sanitize(request.getParameter("newpassword"));
+        String regEmail = policy.sanitize(request.getParameter("email"));
         String dbName, dbPassword, cmpHost, dbURL;
         try {
             Class.forName("org.postgresql.Driver");

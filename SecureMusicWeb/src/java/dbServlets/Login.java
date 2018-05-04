@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.mail.*;
 import javax.servlet.http.HttpSession;
+import org.owasp.html.*;
 
 /**
  *
@@ -30,9 +31,11 @@ public class Login extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
-        String logName = request.getParameter("username");
-        String logPass = request.getParameter("pass");
+        
+        PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.LINKS);
+        
+        String logName = policy.sanitize(request.getParameter("username"));
+        String logPass = policy.sanitize(request.getParameter("pass"));
         HttpSession session = request.getSession();
 
         try {

@@ -18,6 +18,7 @@ public class UserCheck extends HttpServlet {
 
     @SuppressWarnings("empty-statement")
     public static boolean verifyUser(String logName, String logPass) throws ClassNotFoundException, SQLException {
+        
         String dbName, dbPassword, cmpHost, dbURL;
         boolean verified = false;
         try {

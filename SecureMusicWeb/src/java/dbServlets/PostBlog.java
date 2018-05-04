@@ -19,6 +19,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.owasp.html.PolicyFactory;
+import org.owasp.html.Sanitizers;
 
 /**
  *
@@ -32,10 +34,12 @@ public class PostBlog extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String dbName, dbPassword, cmpHost, dbURL;
         HttpSession session = request.getSession();
+        PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.LINKS);
+        
         if (session.getAttribute("isLoggedIn") != null) {
-            String blogTitle = request.getParameter("blogtitle");
-            String blogContent = request.getParameter("blogcontent");
-            String username = session.getAttribute("username").toString();
+            String blogTitle = policy.sanitize(request.getParameter("blogtitle"));
+            String blogContent = policy.sanitize(request.getParameter("blogcontent"));
+            String username = policy.sanitize(session.getAttribute("username").toString());
             try {
                 Class.forName("org.postgresql.Driver");
                 dbName = "groupcz";
