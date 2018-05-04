@@ -74,11 +74,6 @@
                         <!--Form only allows certain characters to be entered-->
                         <label>Username: </label><input type="text" pattern="\w+" name="username" id="user" placeholder="Enter Username" required><br/>
                         <label>Password: </label><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="pass" placeholder="Enter Password" id="password"><br/>
-                        <%
-                            //ReCaptcha c = ReCaptchaFactory.newReCaptcha("your_public_key", "your_private_key", false);
-                            ReCaptcha captcha = ReCaptchaFactory.newReCaptcha("6LeaQSATAAAAAAiABGbBT69efQWe-FHQG9g_t7u4", "6LeaQSATAAAAANs4YFVJG1RvVPRpwx6bM6jcqzrZ", false);
-                            out.print(captcha.createRecaptchaHtml(null, null));
-                        %>
                         <p><a href="reset.html">Forgotten Password?</a></p>
                         ${invalidMessage}
                         <input class="loginsubmission" type="submit" value="Login" />
@@ -176,92 +171,86 @@
             <% if ((session.getAttribute("isLoggedIn") == null)) { %>
             Please log in or register to view or create new blog posts
             <% } else {%>
-            Please click HERE to create a new blog post.
             <form id ="blogSubmit" method="post" action="PostBlog">
                 <h3>Create your blog post</h3>
                 <!--Form only allows certain characters to be entered-->
                 <label>Blog title: </label><input type="text" name="blogtitle" id="blogtitle" placeholder="Enter Blog Title"><br/>
-                <textarea type="text" name="blogcontent" placeholder="Enter your content here" id="blogcontent" required cols="40" rows="10"></textarea>
-                <br/>
-                <input class="newblogsubmission" type="submit" value="Post" />
-            </form>
+                <textarea type="text" name="blogcontent"></textarea>
+                <input class="button" type="submit" value="Post" />
+            </form><br>
             <div>
-                <table>
-                    <tr>
-                        <td><b>Title</b></td>
-                        <td><b>Author</b></td>
-                        <td><b>Content</b></td>
-                    </tr>
-                    <%
-                        try {
-                            Class.forName("org.postgresql.Driver");
-                            String dbName, dbPassword, cmpHost, dbURL;
-                            dbName = "groupcz";
-                            dbPassword = "groupcz";
-                            cmpHost = "cmpstudb-02.cmp.uea.ac.uk";
-                            dbURL = ("jdbc:postgresql://" + cmpHost + "/" + dbName);
-                            Connection connection = DriverManager.getConnection(dbURL, dbName, dbPassword);
-                            Statement stmt = connection.createStatement();
-                            String SQL1 = "SET search_path TO musicweb";
-                            stmt.executeUpdate(SQL1);
-                            String SQL2 = "SELECT * FROM blogs";
-                            ResultSet rs = stmt.executeQuery(SQL2);
-                            while (rs.next()) {
+                <%
+                    try {
+                        Class.forName("org.postgresql.Driver");
+                        String dbName, dbPassword, cmpHost, dbURL;
+                        dbName = "groupcz";
+                        dbPassword = "groupcz";
+                        cmpHost = "cmpstudb-02.cmp.uea.ac.uk";
+                        dbURL = ("jdbc:postgresql://" + cmpHost + "/" + dbName);
+                        Connection connection = DriverManager.getConnection(dbURL, dbName, dbPassword);
+                        Statement stmt = connection.createStatement();
+                        String SQL1 = "SET search_path TO musicweb";
+                        stmt.executeUpdate(SQL1);
+                        String SQL2 = "SELECT * FROM blogs";
+                        ResultSet rs = stmt.executeQuery(SQL2);
+                        while (rs.next()) {
 
-                    %>
-                    <tr>
-                        <td><%=rs.getString("title")%></td>
-                        <td><%=rs.getString("username")%></td>
-                        <td><%=rs.getString("content")%></td></tr><br>
-                        <%
-                            }
-                        %>
-                </table>
+                %>
+                <div class="blogposts">
+                    <p> <%=rs.getString("username")%>
+                    || Posted at:
+                    <%=rs.getString("time").substring(0, 16) %></p>
+                    <%=rs.getString("title")%><br>
+                    <%=rs.getString("content")%><br>
+                    
+                </div>
+                <%
+                    }
+                %>
                 <%
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 %>
+                <% }%>
             </div>
-            <% }%>
+
+        </div>
+        <br>
+        <!--contains footer information, i.e.pages, social media links, contact-->
+        <div class="footer">
+
+            <div class="socialMedia">
+                <p>Social Media Links:</p><br/>
+                <img id="facebook" src="images\SM6.png" alt="Facebook Link">
+                <img id="twitter" src="images\SM2.png" alt="Twitter Link">
+                <img id="music" src="images\SM1.png" alt="Music Link">
+                <img id="youtube" src="images\SM3.png" alt="YouTube Link">
+                <img id="insta" src="images\SM4.png" alt="Instagram Link">
+                <img id="camera" src="images\SM5.png" alt="Camera Link">
+            </div>
+
+            <p id="policy"><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> | © <i>SecureMusic Int. Lmt. 2018</i></p>
+            <div class="footerLinks">
+                <ul>
+                    <li><a href="index.jsp">Home</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="news.html">News</a></li>
+                    <li><a href="loginregister.html">Login/Register</a></li>
+                    <li><a href="profile.jsp">Profile</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                </ul>
+            </div>
+
+            <div class="contactLinks">
+                <ul>
+                    <li>Phone: 0344-000-0000</li>
+                    <li>Email: customersupport@securemusic.com</li>
+                </ul>
+            </div>
+
         </div>
 
-    </div>
-    <br>
-    <!--contains footer information, i.e.pages, social media links, contact-->
-    <div class="footer">
-
-        <div class="socialMedia">
-            <p>Social Media Links:</p><br/>
-            <img id="facebook" src="images\SM6.png" alt="Facebook Link">
-            <img id="twitter" src="images\SM2.png" alt="Twitter Link">
-            <img id="music" src="images\SM1.png" alt="Music Link">
-            <img id="youtube" src="images\SM3.png" alt="YouTube Link">
-            <img id="insta" src="images\SM4.png" alt="Instagram Link">
-            <img id="camera" src="images\SM5.png" alt="Camera Link">
-        </div>
-
-        <p id="policy"><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> | © <i>SecureMusic Int. Lmt. 2018</i></p>
-        <div class="footerLinks">
-            <ul>
-                <li><a href="index.jsp">Home</a></li>
-                <li><a href="blog.html">Blog</a></li>
-                <li><a href="news.html">News</a></li>
-                <li><a href="loginregister.html">Login/Register</a></li>
-                <li><a href="profile.jsp">Profile</a></li>
-                <li><a href="contact.html">Contact Us</a></li>
-            </ul>
-        </div>
-
-        <div class="contactLinks">
-            <ul>
-                <li>Phone: 0344-000-0000</li>
-                <li>Email: customersupport@securemusic.com</li>
-            </ul>
-        </div>
-
-    </div>
-
-</body>
+    </body>
 
 </html>
