@@ -5,7 +5,9 @@
  */
 package dbServlets;
 
+import static SecurityClasses.PasswordHash.hashPass;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -26,37 +28,50 @@ public class Register extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        
-        //Set up HTML sanitizers to allow inline formatting and links only
-        //Source: OWASP Java HTML Sanitizer Project
-        PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.LINKS).and(Sanitizers.TABLES);
-
-        String regName = policy.sanitize(request.getParameter("newusername"));
-        String regPass = policy.sanitize(request.getParameter("newpassword"));
-        String regEmail = policy.sanitize(request.getParameter("email"));
-        String dbName, dbPassword, cmpHost, dbURL;
         try {
-            Class.forName("org.postgresql.Driver");
-            dbName = "groupcz";
-            dbPassword = "groupcz";
-            cmpHost = "cmpstudb-02.cmp.uea.ac.uk";
-            dbURL = ("jdbc:postgresql://" + cmpHost + "/" + dbName);
-            Connection connection = DriverManager.getConnection(dbURL, dbName, dbPassword);
-
-            String SQL1 = "SET search_path TO musicweb";
-            Statement stmt = connection.createStatement();
-            stmt.executeUpdate(SQL1);
+            response.setContentType("text/html;charset=UTF-8");
             
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO dbuser VALUES (?, ?, ?)");
-            ps.setString(1, regName);
-            ps.setString(2, regPass);
-            ps.setString(3, regEmail);
-            ps.executeUpdate();
-            response.sendRedirect("index.jsp");
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            //Set up HTML sanitizers to allow inline formatting and links only
+            //Source: OWASP Java HTML Sanitizer Project
+            PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.LINKS).and(Sanitizers.TABLES);
+            
+            String regName = policy.sanitize(request.getParameter("newusername"));
+            String regPass = hashPass(policy.sanitize(request.getParameter("newpassword")));
+            String regEmail = policy.sanitize(request.getParameter("email"));
+            String dbName, dbPassword, cmpHost, dbURL;
+            try {
+                Class.forName("org.postgresql.Driver");
+                dbName = "groupcz";
+                dbPassword = "groupcz";
+                cmpHost = "cmpstudb-02.cmp.uea.ac.uk";
+                dbURL = ("jdbc:postgresql://" + cmpHost + "/" + dbName);
+                Connection connection = DriverManager.getConnection(dbURL, dbName, dbPassword);
+                
+                String SQL1 = "SET search_path TO musicweb";
+                Statement stmt = connection.createStatement();
+                stmt.executeUpdate(SQL1);
+                
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO dbuser VALUES (?, ?, ?)");
+                ps.setString(1, regName);
+                ps.setString(2, regPass);
+                ps.setString(3, regEmail);
+                ps.executeUpdate();
+                response.sendRedirect("index.jsp");
+            } catch (ClassNotFoundException | SQLException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            //
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
         }
         //
+    }
+    public static void main(String[] args) {
+        String password = "password";
+        try {
+            System.out.println(hashPass(password));
+        } catch(NoSuchAlgorithmException e) {
+            System.out.println(e);
+        }
     }
 }
