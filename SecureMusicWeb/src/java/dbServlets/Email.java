@@ -5,11 +5,13 @@
  */
 package dbServlets;
 
+import static SecurityClasses.PasswordHash.hashPass;
 import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Properties;
 import java.lang.Object;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -17,6 +19,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -44,12 +48,13 @@ public class Email extends HttpServlet {
         PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.LINKS);
 
         String resetUser = policy.sanitize(request.getParameter("username"));
-        String resetEmail = policy.sanitize(request.getParameter("email"));
+        String resetEmail = policy.sanitize(request.getParameter("email")).replaceAll("&#64;", "@");
 
         UUID randomGen = UUID.randomUUID();
         log("UUID One: " + randomGen);
         String newPass = randomGen.toString().substring(0, 7);
-
+        
+        
         String dbName, dbPassword, cmpHost, dbURL;
         boolean found = false;
         try {
@@ -63,6 +68,8 @@ public class Email extends HttpServlet {
             String SQL1 = "SET search_path TO musicweb";
             Statement stmt = connection.createStatement();
             stmt.executeUpdate(SQL1);
+            
+            String hashPass = hashPass(newPass);
 
             PreparedStatement ps = connection.prepareStatement("SELECT * from dbuser WHERE username = ? AND email = ?");
             ps.setString(1, resetUser);
@@ -71,10 +78,12 @@ public class Email extends HttpServlet {
             found = rs.next();
 
             ps = connection.prepareStatement("UPDATE dbuser SET password = ? WHERE username = ?");
-            ps.setString(1, newPass);
+            ps.setString(1, hashPass);
             ps.setString(2, resetUser);
             ps.executeUpdate();
         } catch (ClassNotFoundException | SQLException e) {
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(Email.class.getName()).log(Level.SEVERE, null, ex);
         }
         if (found) {
             Properties props = new Properties();
@@ -93,7 +102,7 @@ public class Email extends HttpServlet {
                 Message message = new MimeMessage(session);
                 message.setFrom(new InternetAddress("securemusicweb@gmail.com"));
                 message.setRecipients(Message.RecipientType.TO,
-                        InternetAddress.parse("nickgrajecki@gmail.com"));
+                        InternetAddress.parse(resetEmail));
                 message.setSubject("You requested a password reset");
                 message.setText("Dear " + resetUser
                         + ",\n\nYou have recently requested a password reset.\n"

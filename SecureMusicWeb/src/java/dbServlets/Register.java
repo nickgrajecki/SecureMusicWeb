@@ -37,7 +37,7 @@ public class Register extends HttpServlet {
             
             String regName = policy.sanitize(request.getParameter("newusername"));
             String regPass = hashPass(policy.sanitize(request.getParameter("newpassword")));
-            String regEmail = policy.sanitize(request.getParameter("email"));
+            String regEmail = policy.sanitize(request.getParameter("email")).replaceAll("&#64;", "@");
             String dbName, dbPassword, cmpHost, dbURL;
             try {
                 Class.forName("org.postgresql.Driver");
