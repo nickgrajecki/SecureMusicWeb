@@ -164,6 +164,12 @@ body {
     to {opacity: 1}
 }
 
+.main h1 {
+    font-size: 300%;
+    padding-left: 2em;
+    padding-bottom: 0.5em;
+}
+
 /*Styling for login section*/
 .loginSection {
     width: 16%;
@@ -173,7 +179,7 @@ body {
     padding-right: 1em;
     padding-top: 1em;
     padding-bottom: 1em;
-    margin-right: 1em;
+    margin-right: 3em;
 }
 
 .loginSection fieldset {
@@ -247,6 +253,12 @@ button:hover, .newusersubmission:hover, .loginsubmission:hover {
     width: 85%;
 }
 
+.blogs {
+    width: 90%;
+    background-color: #1e1e1e;
+    font-size: medium;
+}
+
 .blogposts {
     border-top-style: dashed;
     border-right-style: solid;
@@ -302,6 +314,10 @@ button:hover, .newusersubmission:hover, .loginsubmission:hover {
   transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
   text-align: center;
+}
+
+#loginrequest {
+    padding-left: 10em;
 }
 /*Footer CSS*/
 .footer {

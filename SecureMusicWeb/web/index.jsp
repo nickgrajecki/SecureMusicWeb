@@ -101,9 +101,11 @@
                 </form>
 
             </div> 
+                        
+                        <h1>WHAT'S ON?</h1>
 
             <div class="forumDirectory">
-                <h1>WHAT'S ON?</h1>
+                
 
 
                 <div class="newsSlideshow">
@@ -182,7 +184,7 @@
         <!-- Checks if logged in, if not, displays message, otherwise shows posts and allows to make new one --> 
         <div class="blogs">
             <% if ((session.getAttribute("isLoggedIn") == null)) { %>
-            Please log in or register to view or create new blog posts
+            <p id="loginrequest">Please log in or register to view or create new blog posts</p>
             <% } else {%>
             <form id ="blogSubmit" method="post" action="PostBlog">
                 <h3>Create your blog post</h3>
