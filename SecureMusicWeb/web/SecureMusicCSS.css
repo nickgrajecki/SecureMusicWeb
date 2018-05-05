@@ -264,18 +264,45 @@ button:hover, .newusersubmission:hover, .loginsubmission:hover {
 }
 
 .trend {
-    width: 100%;
     text-align: center;
+    position: relative;
+    width: 100%;
 }
 
 .trend img {
-    display: inline-block;
-    width: 29%;
-    padding-left: 1em;
-    padding-top: 3em;
-    padding-bottom: 3em;
+    display: block;
+    width: 100%;
 }
 
+.overlay {
+  display: inline-block;
+  top: 0;
+  margin: auto;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  opacity: 0;
+  transition: .5s ease;
+  background-color: #1e1e1e;
+}
+
+.trend:hover .overlay {
+  opacity: 1;
+}
+
+.overlayText {
+  color: white;
+  font-size: 20px;
+  position: absolute;
+  display: inline-block;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
 /*Footer CSS*/
 .footer {
     position: relative;

@@ -3,12 +3,11 @@
 <%@page import="java.sql.DriverManager"%>
 <%@page import="java.sql.DriverManager"%>
 <%@page import="java.sql.Connection"%>
-<%@ page import="net.tanesha.recaptcha.ReCaptcha" %>
-<%@ page import="net.tanesha.recaptcha.ReCaptchaFactory" %>
 <!DOCTYPE html>
 <html>
 
     <head>
+        <!--Meta data-->
         <title>Secure Music</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,7 +18,6 @@
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script type="text/javascript" src="SecureMusicJS.js"></script>
-        <script src='https://www.google.com/recaptcha/api.js'></script>
         <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=p6szcpxygu55ycfq39yga5wgs2vustj56sthnuidnu5heuja"></script>
         <script>tinymce.init({
                 selector: 'textarea',
@@ -28,6 +26,7 @@
         </script>
     </head>
 
+    <!--when page loads, JavaScript also loads-->
     <body onload='scrollFade();' onload='showSlides();'>
 
         <!--nav div containing links to all pages-->
@@ -45,7 +44,7 @@
         <!--header div containing title, logo, and background image-->
         <div class="header">
             <h1>SECURE MUSIC</h1>
-            <h3 class="tagline">Congratulations! You are our 1 millionth visitor. Click here to claim your prize.</h3>
+            <h3 class="tagline">Music Blogging without the Treble.</h3>
         </div>
 
         <div class="slideshowcontainer">
@@ -140,14 +139,28 @@
                 <h1>TRENDING TOPICS</h1>
 
                 <div class="trend">
-                    <img src="images\Concert1.png" />
-                    <img src="images\Preview1.png" />
-                    <img src="images\Preview2.png" />
+                    <img src="images\Shot1.png" />
+                    <div class="overlay">
+                        <div class="overlayText">Highlights and Best Bits: Our most popular posts</div>
+                    </div>
+                </div>
+                
+                <div class="trend">
+                    <img src="images\Shot2.png" />
+                    <div class="overlay" style="background-color: #3d3d3d">
+                        <div class="overlayText">Top 10 worldwide venues: where have you been?</div>
+                    </div>
+                </div>
+                
+                <div class="trend">
+                    <img src="images\Shot3.png" />
+                    <div class="overlay" style="background-color: #595959">
+                        <div class="overlayText">The best ways you can support your local artists</div>
+                    </div>
                 </div>
 
                 <h1>MICROBLOG</h1>
                 <div class="microblog">
-
                 </div>
 
             </div>
@@ -198,11 +211,11 @@
                 %>
                 <div class="blogposts">
                     <p> <%=rs.getString("username")%>
-                    || Posted at:
-                    <%=rs.getString("time").substring(0, 16) %></p>
+                        || Posted at:
+                        <%=rs.getString("time").substring(0, 16)%></p>
                     <%=rs.getString("title")%><br>
                     <%=rs.getString("content")%><br>
-                    
+
                 </div>
                 <%
                     }

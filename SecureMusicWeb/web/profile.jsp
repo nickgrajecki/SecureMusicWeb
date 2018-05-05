@@ -7,9 +7,12 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <!--Meta data-->
         <title>Your Profile</title>
         <meta charset="UTF-8">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+        <!--StyleSheets: CSS and JS-->
         <link rel="stylesheet" type="text/css" href="SecureMusicCSS.css" />
         <link href="https://fonts.googleapis.com/css?family=Gugi" rel="stylesheet">
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -38,15 +41,15 @@
         </div>
         Welcome ${username}!<br>
         Change password below<br>
-           <form id="passchange" class="tabContent" method="post" action="ChangePass">
-                    <fieldset>
-                        <label>Current password: </label><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="currentpass" placeholder="Enter Current Password" id="password"><br/>
-                        <label>New Password: </label><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="newpass" placeholder="Enter New Password" id="password"><br/>
-                        <label>Confirm New Password: </label><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="confirmpass" placeholder="Confirm New Password" id="password"><br/>
-                        <input class="loginsubmission" type="submit" value="Confirm" />
-                        ${confirmPassMessage}
-                    </fieldset>
-                </form>
+        <form id="passchange" class="tabContent" method="post" action="ChangePass">
+            <fieldset>
+                <label>Current password: </label><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="currentpass" placeholder="Enter Current Password" id="password"><br/>
+                <label>New Password: </label><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="newpass" placeholder="Enter New Password" id="password"><br/>
+                <label>Confirm New Password: </label><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="confirmpass" placeholder="Confirm New Password" id="password"><br/>
+                <input class="loginsubmission" type="submit" value="Confirm" />
+                ${confirmPassMessage}
+            </fieldset>
+        </form>
         -----------------------<br>        
         <!-- Insert form to change password -->
         Your posts:
