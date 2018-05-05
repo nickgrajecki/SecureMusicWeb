@@ -256,7 +256,10 @@ button:hover, .newusersubmission:hover, .loginsubmission:hover {
 .blogs {
     width: 90%;
     background-color: #1e1e1e;
-    font-size: medium;
+    font-size: large;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0.5em;
 }
 
 .blogposts {

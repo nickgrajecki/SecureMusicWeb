@@ -161,7 +161,7 @@
                     </div>
                 </div>
 
-                <h1>MICROBLOG</h1>
+                <h1 style="padding-top: 1em;">MICROBLOG</h1>
                 <div class="microblog">
                 </div>
 
