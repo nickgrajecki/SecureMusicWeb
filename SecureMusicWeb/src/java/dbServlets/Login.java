@@ -7,7 +7,12 @@ package dbServlets;
 
 import static SecurityClasses.PasswordHash.hashPass;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,36 +36,52 @@ public class Login extends HttpServlet {
             throws ServletException, IOException {
         try {
             response.setContentType("text/html;charset=UTF-8");
-            
+            HttpSession session = request.getSession();
+
             //Set up HTML sanitizers to allow inline formatting and links only
             PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.LINKS);
-            
-            int loginCount;
-            
+
             String logName = policy.sanitize(request.getParameter("username"));
             String logPass = hashPass(policy.sanitize(request.getParameter("pass")));
-            HttpSession session = request.getSession();
-            
-            try {
+
+            String dbName, dbPassword, cmpHost, dbURL;
+            Class.forName("org.postgresql.Driver");
+            dbName = "groupcz";
+            dbPassword = "groupcz";
+            cmpHost = "cmpstudb-02.cmp.uea.ac.uk";
+            dbURL = ("jdbc:postgresql://" + cmpHost + "/" + dbName);
+            Connection connection = DriverManager.getConnection(dbURL, dbName, dbPassword);
+
+            PreparedStatement ps1 = connection.prepareStatement("SELECT failed_attempts FROM musicweb.dbuser WHERE username = ?");
+            ps1.setString(1, logName);
+            ResultSet rs = ps1.executeQuery();
+            rs.next();
+            int failedAttempt = (rs.getInt("failed_attempts"));
+
+            if (failedAttempt < 3) {
                 if (UserCheck.verifyUser(logName, logPass)) {
-                    RequestDispatcher rs = request.getRequestDispatcher("Verified");
-                    rs.forward(request, response);
+                    PreparedStatement ps = connection.prepareStatement("UPDATE musicweb.dbuser SET failed_attempts = 0 WHERE username = ?");
+                    ps.setString(1, logName);
+                    ps.executeUpdate();
                     session.setAttribute("username", logName);
                     request.setAttribute("username", logName);
                     session.setAttribute("isLoggedIn", true);
                 } else {
-                    request.setAttribute("invalidMessage", "Password or username invalid"); // Will be available as ${message}
-                    request.getRequestDispatcher("index.jsp").forward(request, response);
-//                RequestDispatcher rs = request.getRequestDispatcher("index.jsp");
-//                rs.include(request, response);
+                    PreparedStatement ps = connection.prepareStatement("UPDATE musicweb.dbuser SET failed_attempts = failed_attempts + 1 WHERE username = ?");
+                    ps.setString(1, logName);
+                    ps.executeUpdate();
+                    if (failedAttempt < 2) {
+                        request.setAttribute("invalidMessage", "Password or username invalid. You have " + (2 - failedAttempt) + " attempts left.");
+                    } else {
+                        request.setAttribute("invalidMessage", "Too many failed attempts. Your account has been locked out");
+                    }
                 }
-            } catch (ClassNotFoundException | SQLException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            } else {
+                request.setAttribute("invalidMessage", "Too many failed attempts. Your account has been locked out");
             }
-            //
-        } catch (NoSuchAlgorithmException ex) {
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+        } catch (NoSuchAlgorithmException | ClassNotFoundException | SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //
     }
 }
