@@ -51,32 +51,42 @@ public class Login extends HttpServlet {
             dbURL = ("jdbc:postgresql://" + cmpHost + "/" + dbName);
             Connection connection = DriverManager.getConnection(dbURL, dbName, dbPassword);
 
-            PreparedStatement ps1 = connection.prepareStatement("SELECT failed_attempts FROM musicweb.dbuser WHERE username = ?");
+            PreparedStatement ps1 = connection.prepareStatement("SELECT failed_attempts, last_attempt FROM musicweb.dbuser WHERE username = ?");
             ps1.setString(1, logName);
             ResultSet rs = ps1.executeQuery();
             rs.next();
-            int failedAttempt = (rs.getInt("failed_attempts"));
+            int failedAttempt = rs.getInt("failed_attempts");
+            long failedTime = rs.getLong("last_attempt");
+            long currentTime = System.currentTimeMillis();
+            long timeLeft = (((currentTime - failedTime) / 1000) / 60);
+            long timeRemaining = 30 - timeLeft;
+            boolean timeElapsed = timeLeft > 30;
 
-            if (failedAttempt < 3) {
-                if (UserCheck.verifyUser(logName, logPass)) {
-                    PreparedStatement ps = connection.prepareStatement("UPDATE musicweb.dbuser SET failed_attempts = 0 WHERE username = ?");
-                    ps.setString(1, logName);
-                    ps.executeUpdate();
-                    session.setAttribute("username", logName);
-                    request.setAttribute("username", logName);
-                    session.setAttribute("isLoggedIn", true);
+            if (timeElapsed) {
+                PreparedStatement ps = connection.prepareStatement("UPDATE musicweb.dbuser SET failed_attempts = 0 WHERE username = ?");
+                ps.setString(1, logName);
+                ps.executeUpdate();
+                failedAttempt = 0;
+            }
+
+            if (UserCheck.verifyUser(logName, logPass) && failedAttempt < 3) {
+                PreparedStatement ps = connection.prepareStatement("UPDATE musicweb.dbuser SET failed_attempts = 0 WHERE username = ?");
+                ps.setString(1, logName);
+                ps.executeUpdate();
+                session.setAttribute("username", logName);
+                request.setAttribute("username", logName);
+                session.setAttribute("isLoggedIn", true);
+            } else if (failedAttempt < 3) {
+                PreparedStatement ps = connection.prepareStatement("UPDATE musicweb.dbuser SET failed_attempts = failed_attempts + 1 WHERE username = ?");
+                ps.setString(1, logName);
+                ps.executeUpdate();
+                if (failedAttempt < 2) {
+                    request.setAttribute("invalidMessage", "Password or username invalid. You have " + (2 - failedAttempt) + " attempts left.");
                 } else {
-                    PreparedStatement ps = connection.prepareStatement("UPDATE musicweb.dbuser SET failed_attempts = failed_attempts + 1 WHERE username = ?");
-                    ps.setString(1, logName);
-                    ps.executeUpdate();
-                    if (failedAttempt < 2) {
-                        request.setAttribute("invalidMessage", "Password or username invalid. You have " + (2 - failedAttempt) + " attempts left.");
-                    } else {
-                        request.setAttribute("invalidMessage", "Too many failed attempts. Your account has been locked out");
-                    }
+                    request.setAttribute("invalidMessage", "Too many failed attempts. Your account has been locked out");
                 }
             } else {
-                request.setAttribute("invalidMessage", "Too many failed attempts. Your account has been locked out");
+                request.setAttribute("invalidMessage", "Account locked. Time remaining: " + timeRemaining + " minutes");
             }
             request.getRequestDispatcher("index.jsp").forward(request, response);
         } catch (NoSuchAlgorithmException | ClassNotFoundException | SQLException ex) {
