@@ -1,8 +1,6 @@
 package dbServlets;
 
 import java.sql.*;
-import javax.servlet.*;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 
 /**

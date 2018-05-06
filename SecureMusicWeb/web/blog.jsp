@@ -51,33 +51,70 @@
 
         <!--main div containing all page content-->
         <div class="main">
-            <!--Checks if user is logged in - if so, run code under-->
-            <% }
 
-                
-                
+            <!--Login form requiring username and password-->
+            <div class="loginSection">
+                <!--Checks if user is logged in - if he isnt, run code under-->
+                <% if ((session.getAttribute("isLoggedIn") == null)) { %>
 
-                else {%>
-            > Welcome, ${username}!<br>
-            <form action="Logout" method="post">
-                <button type="submit" name="logout" value="logout" class="btn-link">Log out</button>
-            </form>
-            <form action="profile.jsp" method="post">
-                <button type="submit" name="profile" value="profile" class="btn-link">Profile</button>
-            </form>
+                <!--Uses Javascript to swap between login and register tabs-->
+                <div class="loginRegister">
+                    <button id="log" onclick="switchToLogin()"> Login </button>
+                    <button id="reg" onclick="switchToRegister()"> Register </button>
+                </div>
+
+                <!--Login Form-->
+                <form id="login" class="tabContent" method="post" action="Login">
+                    <fieldset>
+                        <h3>Enter your username and password</h3>
+                        <!--Form only allows certain characters to be entered-->
+                        <label>Username: </label><input type="text" pattern="\w+" name="username" id="user" placeholder="Enter Username" required><br/>
+                        <label>Password: </label><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="pass" placeholder="Enter Password" id="password"><br/>
+                        <p><a href="reset.html">Forgotten Password?</a></p>
+                        ${invalidMessage}
+                        <input class="loginsubmission" type="submit" value="Login" />
+                    </fieldset>
+                </form>
+
+                <!--Register Form-->
+                <form id="register" class="tabContent" method="post" action="Register">
+                    <fieldset>
+                        <h3>Create your username and password</h3>
+                        <!--Form only allows certain characters to be entered-->
+                        <label>Username: </label><input type="text" pattern="\w+" name="newusername" id="newuser" placeholder="Enter Username" required onclick = hideSetPassword()><br/>
+                        <label>Email: </label><input type="text" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}" name="email" placeholder="nickgrajecki@compuserve.com" id="email" required><br/>
+                        <label>Password: </label><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="newpassword" placeholder="Enter Password" id="newpass" onclick = setPassword()><br/>
+                        <div id="passwordReminder">
+                            <p>Password must contain at least:</p>
+                            <ul id="passwordList">
+                                <li>One uppercase letter</li>
+                                <li>One lowercase letter</li>
+                                <li>One number</li>
+                                <li>Eight characters</li>
+                            </ul>
+                        </div>
+                        <input class="newusersubmission" type="submit" value="Register" />
+                    </fieldset>
+                </form>
+
+                <!--Checks if user is logged in - if so, run code under-->
+                <% } else {%>
+                > Welcome, ${username}!<br>
+                <form action="Logout" method="post">
+                    <button type="submit" name="logout" value="logout" class="btn-link">Log out</button>
+                </form>
+                <form action="profile.jsp" method="post">
+                    <button type="submit" name="profile" value="profile" class="btn-link">Profile</button>
+                </form>
+            </div>
+            <% }%>
         </div>
-        <% }%>
 
         <!--div containing forum directory in the form of links-->
 
         <!-- Checks if logged in, if not, displays message, otherwise shows posts and allows to make new one --> 
         <div class="blogs">
-            <% if ((session.getAttribute (
-                         
-                
-
-                
-                    "isLoggedIn") == null)) { %>
+            <% if ((session.getAttribute("isLoggedIn") == null)) { %>
             <p id="loginrequest">Please log in or register to view or create new blog posts</p>
             <% } else {%>
             <form id ="blogSubmit" method="post" action="PostBlog">
@@ -111,7 +148,6 @@
                         <%=rs.getString("time").substring(0, 16)%></p>
                     <%=rs.getString("title")%><br>
                     <%=rs.getString("content")%><br>
-
                 </div>
                 <%
                     }
@@ -123,7 +159,6 @@
                 %>
                 <% }%>
             </div>
-
         </div>
         <br>
     </div>
@@ -156,7 +191,7 @@
                 <li><a href="contact.html">Contact Us</a></li>
             </ul>
         </div>
-
+        
         <!--additional contact links, including mailto link-->
         <div class="contactLinks">
             <ul>
@@ -164,9 +199,6 @@
                 <li>Email: <a href="mailto:customersupport@securemusic.com" target="_top">customersupport@securemusic.com</a></li>
             </ul>
         </div>
-
     </div>
-
 </body>
-
 </html>

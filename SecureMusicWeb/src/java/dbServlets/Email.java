@@ -52,7 +52,7 @@ public class Email extends HttpServlet {
 
         UUID randomGen = UUID.randomUUID();
         log("UUID One: " + randomGen);
-        String newPass = randomGen.toString().substring(0, 7);
+        String newPass = "T" + randomGen.toString().substring(0, 7) + "f";
         
         
         String dbName, dbPassword, cmpHost, dbURL;

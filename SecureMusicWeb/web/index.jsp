@@ -98,91 +98,90 @@
                     </fieldset>
                 </form>
 
-            </div> 
+                <!--Checks if user is logged in - if so, run code under-->
+                <% } else {%>
+                > Welcome, ${username}!<br>
+                <form action="Logout" method="post">
+                    <button type="submit" name="logout" value="logout" class="btn-link">Log out</button>
+                </form>
+                <form action="profile.jsp" method="post">
+                    <button type="submit" name="profile" value="profile" class="btn-link">Profile</button>
+                </form>
+            </div>
+            <% }%>
+        </div> 
 
-            <!--dummy content for the purpose of aesthetics-->
-            <h1>WHAT'S ON?</h1>
+        <!--dummy content for the purpose of aesthetics-->
+        <h1>WHAT'S ON?</h1>
 
-            <div class="forumDirectory">
+        <div class="forumDirectory">
 
-                <!--javascript 'news' slideshow-->
-                <div class="newsSlideshow">
-                    <div class="newsFade" id='fade1'>
-                        <div class="number"></div>
-                        <img src="images\Concert1.png">
-                        <div class="text">Lotus Festival (2017)</div>
-                    </div>
-
-                    <div class="newsFade">
-                        <div class="number"></div>
-                        <img src="images\Preview1.png">
-                        <div class="text">One industry expert's opinion on rising in the ranks.</div>
-                    </div>
-
-                    <div class="newsFade">
-                        <div class="number"></div>
-                        <img src="images\Preview2.png">
-                        <div class="text">Pitch perfection: mixing secrets of the Gods.</div>
-                    </div>
-
-                    <a class="previous" onlick="plusSlides(-1)">&#10094;</a>
-                    <a class="next" onclick="plusSlides(1)">&#10095;</a>
-
+            <!--javascript 'news' slideshow-->
+            <div class="newsSlideshow">
+                <div class="newsFade" id='fade1'>
+                    <div class="number"></div>
+                    <img src="images\Concert1.png">
+                    <div class="text">Lotus Festival (2017)</div>
                 </div>
 
-                <div style="text-align:center">
-                    <span class="dot" onclick="currentSlide(1)"></span> 
-                    <span class="dot" onclick="currentSlide(2)"></span> 
-                    <span class="dot" onclick="currentSlide(3)"></span> 
+                <div class="newsFade">
+                    <div class="number"></div>
+                    <img src="images\Preview1.png">
+                    <div class="text">One industry expert's opinion on rising in the ranks.</div>
                 </div>
 
-                <!--javascript hover buttons previewing aspects of discussion-->
-                <h1>TRENDING TOPICS</h1>
-
-                <div class="trend">
-                    <a href="#">
-                        <img src="images\Shot1.png" /> 
-                        <div class="overlay">
-                            <div class="overlayText">Highlights and Best Bits: Our most popular posts</div>
-                        </div>
-                    </a>
+                <div class="newsFade">
+                    <div class="number"></div>
+                    <img src="images\Preview2.png">
+                    <div class="text">Pitch perfection: mixing secrets of the Gods.</div>
                 </div>
 
-                <div class="trend">
-                    <a href="#">
-                        <img src="images\Shot2.png" />
-                        <div class="overlay" style="background-color: #3d3d3d">
-                            <div class="overlayText">Top 10 worldwide venues: where have you been?</div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="trend">
-                    <a href="#">
-                        <img src="images\Shot3.png" />
-                        <div class="overlay" style="background-color: #595959">
-                            <div class="overlayText">The best ways you can support your local artists</div>
-                        </div>
-                    </a>
-                </div>
-
-                <h1 style="padding-top: 1em;">MICROBLOG</h1>
-                <div class="microblog">
-                </div>
+                <a class="previous" onlick="plusSlides(-1)">&#10094;</a>
+                <a class="next" onclick="plusSlides(1)">&#10095;</a>
 
             </div>
 
-            <!--Checks if user is logged in - if so, run code under-->
-            <% } else {%>
-            > Welcome, ${username}!<br>
-            <form action="Logout" method="post">
-                <button type="submit" name="logout" value="logout" class="btn-link">Log out</button>
-            </form>
-            <form action="profile.jsp" method="post">
-                <button type="submit" name="profile" value="profile" class="btn-link">Profile</button>
-            </form>
+            <div style="text-align:center">
+                <span class="dot" onclick="currentSlide(1)"></span> 
+                <span class="dot" onclick="currentSlide(2)"></span> 
+                <span class="dot" onclick="currentSlide(3)"></span> 
+            </div>
+
+            <!--javascript hover buttons previewing aspects of discussion-->
+            <h1>TRENDING TOPICS</h1>
+
+            <div class="trend">
+                <a href="#">
+                    <img src="images\Shot1.png" /> 
+                    <div class="overlay">
+                        <div class="overlayText">Highlights and Best Bits: Our most popular posts</div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="trend">
+                <a href="#">
+                    <img src="images\Shot2.png" />
+                    <div class="overlay" style="background-color: #3d3d3d">
+                        <div class="overlayText">Top 10 worldwide venues: where have you been?</div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="trend">
+                <a href="#">
+                    <img src="images\Shot3.png" />
+                    <div class="overlay" style="background-color: #595959">
+                        <div class="overlayText">The best ways you can support your local artists</div>
+                    </div>
+                </a>
+            </div>
+
+            <h1 style="padding-top: 1em;">MICROBLOG</h1>
+            <div class="microblog">
+            </div>
+
         </div>
-        <% }%>
 
         <!--div containing forum directory in the form of links-->
 
@@ -237,7 +236,7 @@
 
         </div>
         <br>
-        
+
         <!--contains footer information, i.e.pages, social media links, contact-->
         <div class="footer">
 
@@ -254,7 +253,7 @@
 
             <!--dummy copyright text-->
             <p id="policy"><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> | © <i>SecureMusic Int. Lmt. 2018</i></p>
-            
+
             <!--links to other pages on the website-->
             <div class="footerLinks">
                 <ul>
