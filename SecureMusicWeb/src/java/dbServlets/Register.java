@@ -8,7 +8,6 @@ package dbServlets;
 import static SecurityClasses.PasswordHash.hashPass;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -27,28 +26,18 @@ import org.owasp.html.Sanitizers;
 @WebServlet(urlPatterns = {"/Register"})
 public class Register extends HttpServlet {
 
-    protected int newSalt;
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             response.setContentType("text/html;charset=UTF-8");
-
+            
             //Set up HTML sanitizers to allow inline formatting and links only
             //Source: OWASP Java HTML Sanitizer Project
             PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.LINKS).and(Sanitizers.TABLES);
-
+            
             String regName = policy.sanitize(request.getParameter("newusername"));
-            String regPass = policy.sanitize(request.getParameter("newpassword"));
+            String regPass = hashPass(policy.sanitize(request.getParameter("newpassword")));
             String regEmail = policy.sanitize(request.getParameter("email")).replaceAll("&#64;", "@");
-
-            //For random salting (in registration):
-            SecureRandom secRand = SecureRandom.getInstanceStrong();
-            String salt = "";
-            for (int i = 0; i < 8; i++) {
-                salt += secRand.nextInt(9);
-            }
-
             String dbName, dbPassword, cmpHost, dbURL;
             try {
                 Class.forName("org.postgresql.Driver");
@@ -57,20 +46,18 @@ public class Register extends HttpServlet {
                 cmpHost = "cmpstudb-02.cmp.uea.ac.uk";
                 dbURL = ("jdbc:postgresql://" + cmpHost + "/" + dbName);
                 Connection connection = DriverManager.getConnection(dbURL, dbName, dbPassword);
-
+                
                 String SQL1 = "SET search_path TO musicweb";
                 Statement stmt = connection.createStatement();
                 stmt.executeUpdate(SQL1);
-
-                PreparedStatement ps = connection.prepareStatement("INSERT INTO dbuser VALUES (?, ?, ?, ?, ?, ?)");
+                
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO dbuser VALUES (?, ?, ?, ?, ?)");
                 ps.setString(1, regName);
-                ps.setString(2, hashPass(salt + regPass));
+                ps.setString(2, regPass);
                 ps.setString(3, regEmail);
                 ps.setInt(4, 0);
                 ps.setLong(5, System.currentTimeMillis());
-                ps.setString(6, salt);
                 ps.executeUpdate();
-                request.setAttribute("invalidMessage", "Registered successfully");
                 response.sendRedirect("index.jsp");
             } catch (ClassNotFoundException | SQLException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
@@ -81,12 +68,11 @@ public class Register extends HttpServlet {
         }
         //
     }
-
     public static void main(String[] args) {
         String password = "password";
         try {
             System.out.println(hashPass(password));
-        } catch (NoSuchAlgorithmException e) {
+        } catch(NoSuchAlgorithmException e) {
             System.out.println(e);
         }
     }
