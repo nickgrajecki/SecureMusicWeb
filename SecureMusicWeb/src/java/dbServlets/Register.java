@@ -60,7 +60,7 @@ public class Register extends HttpServlet {
                 
                 PreparedStatement ps = connection.prepareStatement("INSERT INTO dbuser VALUES (?, ?, ?, ?, ?, ?)");
                 ps.setString(1, regName);
-                ps.setString(2, regPass);
+                ps.setString(2, secRand.toString() + regPass);
                 ps.setString(3, regEmail);
                 ps.setInt(4, 0);
                 ps.setLong(5, System.currentTimeMillis());
