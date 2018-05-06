@@ -37,12 +37,6 @@ public class Login extends HttpServlet {
             response.setContentType("text/html;charset=UTF-8");
             HttpSession session = request.getSession();
 
-            //Set up HTML sanitizers to allow inline formatting and links only
-            PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.LINKS);
-
-            String logName = policy.sanitize(request.getParameter("username"));
-            String logPass = hashPass(policy.sanitize(request.getParameter("pass")));
-
             String dbName, dbPassword, cmpHost, dbURL;
             Class.forName("org.postgresql.Driver");
             dbName = "groupcz";
@@ -50,6 +44,49 @@ public class Login extends HttpServlet {
             cmpHost = "cmpstudb-02.cmp.uea.ac.uk";
             dbURL = ("jdbc:postgresql://" + cmpHost + "/" + dbName);
             Connection connection = DriverManager.getConnection(dbURL, dbName, dbPassword);
+            //Set up HTML sanitizers to allow inline formatting and links only
+            PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.LINKS);
+            long currentTime = System.currentTimeMillis();
+
+            //My failed attempt at IP flood control
+            
+//            String IPAddress = InetAddress.getLocalHost().toString();
+//            String[] IPparts = IPAddress.split("/");
+//            IPAddress = IPparts[1];
+//            int IPAttemptJ = 0;
+//            
+//            if (session.getAttribute("IPAttempt") == null) {
+//                session.setAttribute("IPAttempt", 1);
+//                IPAttemptJ = Integer.parseInt(session.getAttribute("IPAttempt").toString());
+//            }
+//
+//            if (IPAttemptJ < 3) {
+//                session.setAttribute("IPAttempt", IPAttemptJ + 1);
+//            } else {
+//                PreparedStatement psip = connection.prepareStatement("INSERT INTO musicweb.ip VALUES (?,?)");
+//                psip.setString(1, IPAddress);
+//                psip.setLong(2, currentTime);
+//                psip.executeUpdate();
+//                session.setAttribute("IPLock", true);
+//            }
+//
+//            try {
+//                PreparedStatement psip = connection.prepareStatement("SELECT * FROM musicweb.ip WHERE address = ?");
+//                psip.setString(1, IPAddress);
+//                ResultSet rsIP = psip.executeQuery();
+//                while (rsIP.next()) {
+//                    long ipTime = rsIP.getLong("time_added");
+//                    boolean ipTimeElapsed = (((currentTime - ipTime) / 1000) / 60) > 30;
+//                    if (ipTimeElapsed) {
+//                        session.setAttribute("IPLock", false);
+//                        session.setAttribute("IPAttempt", 0);
+//                    }
+//                }
+//            } catch (SQLException E) {
+//            }
+
+            String logName = policy.sanitize(request.getParameter("username"));
+            String logPass = hashPass(policy.sanitize(request.getParameter("pass")));
 
             PreparedStatement ps1 = connection.prepareStatement("SELECT failed_attempts, last_attempt FROM musicweb.dbuser WHERE username = ?");
             ps1.setString(1, logName);
@@ -57,12 +94,11 @@ public class Login extends HttpServlet {
             rs.next();
             int failedAttempt = rs.getInt("failed_attempts");
             long failedTime = rs.getLong("last_attempt");
-            long currentTime = System.currentTimeMillis();
             long timeLeft = (((currentTime - failedTime) / 1000) / 60);
             long timeRemaining = 30 - timeLeft;
             boolean timeElapsed = timeLeft > 30;
 
-            if (timeElapsed) {
+            if (timeElapsed && failedAttempt >= 3) {
                 PreparedStatement ps = connection.prepareStatement("UPDATE musicweb.dbuser SET failed_attempts = 0 WHERE username = ?");
                 ps.setString(1, logName);
                 ps.executeUpdate();
@@ -83,9 +119,13 @@ public class Login extends HttpServlet {
                 if (failedAttempt < 2) {
                     request.setAttribute("invalidMessage", "Password or username invalid. You have " + (2 - failedAttempt) + " attempts left.");
                 } else {
+                    PreparedStatement ps2 = connection.prepareStatement("UPDATE musicweb.dbuser SET last_attempt = ? WHERE username = ?");
+                    ps2.setLong(1, currentTime);
+                    ps2.setString(2, logName);
+                    ps2.executeUpdate();
                     request.setAttribute("invalidMessage", "Too many failed attempts. Your account has been locked out");
                 }
-            } else {
+            } else if (failedAttempt >= 3) {
                 request.setAttribute("invalidMessage", "Account locked. Time remaining: " + timeRemaining + " minutes");
             }
             request.getRequestDispatcher("index.jsp").forward(request, response);
