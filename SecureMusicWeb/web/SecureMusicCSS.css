@@ -319,9 +319,27 @@ button:hover, .newusersubmission:hover, .loginsubmission:hover {
   text-align: center;
 }
 
+.contactForm {
+    border: solid 1px white;
+    padding: 1em;
+}
+
+#query {
+    width: 25em;
+    padding-bottom: 5em;
+}
+
 #loginrequest {
     padding-left: 10em;
 }
+
+.cForm {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2em;
+}
+
 /*Footer CSS*/
 .footer {
     position: relative;

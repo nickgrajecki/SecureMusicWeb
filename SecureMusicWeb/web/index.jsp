@@ -41,16 +41,14 @@
             </ul>
         </div>
 
-        <!--header div containing title, logo, and background image-->
+        <!--header div containing title and tagline-->
         <div class="header">
             <h1>SECURE MUSIC</h1>
             <h3 class="tagline">Music Blogging without the Treble.</h3>
         </div>
 
-        <div class="slideshowcontainer">
-            <img class="headerBackground" src="images\header1.jpg" alt="Header Background">
-
-        </div>
+        <!--header background is separate from the div for easier styling-->
+        <img class="headerBackground" src="images\header1.jpg" alt="Header Background">
 
         <!--main div containing all page content-->
         <div class="main">
@@ -101,13 +99,13 @@
                 </form>
 
             </div> 
-                        
-                        <h1>WHAT'S ON?</h1>
+
+            <!--dummy content for the purpose of aesthetics-->
+            <h1>WHAT'S ON?</h1>
 
             <div class="forumDirectory">
-                
 
-
+                <!--javascript 'news' slideshow-->
                 <div class="newsSlideshow">
                     <div class="newsFade" id='fade1'>
                         <div class="number"></div>
@@ -138,27 +136,34 @@
                     <span class="dot" onclick="currentSlide(3)"></span> 
                 </div>
 
+                <!--javascript hover buttons previewing aspects of discussion-->
                 <h1>TRENDING TOPICS</h1>
 
                 <div class="trend">
-                    <img src="images\Shot1.png" />
-                    <div class="overlay">
-                        <div class="overlayText">Highlights and Best Bits: Our most popular posts</div>
-                    </div>
+                    <a href="#">
+                        <img src="images\Shot1.png" /> 
+                        <div class="overlay">
+                            <div class="overlayText">Highlights and Best Bits: Our most popular posts</div>
+                        </div>
+                    </a>
                 </div>
-                
+
                 <div class="trend">
-                    <img src="images\Shot2.png" />
-                    <div class="overlay" style="background-color: #3d3d3d">
-                        <div class="overlayText">Top 10 worldwide venues: where have you been?</div>
-                    </div>
+                    <a href="#">
+                        <img src="images\Shot2.png" />
+                        <div class="overlay" style="background-color: #3d3d3d">
+                            <div class="overlayText">Top 10 worldwide venues: where have you been?</div>
+                        </div>
+                    </a>
                 </div>
-                
+
                 <div class="trend">
-                    <img src="images\Shot3.png" />
-                    <div class="overlay" style="background-color: #595959">
-                        <div class="overlayText">The best ways you can support your local artists</div>
-                    </div>
+                    <a href="#">
+                        <img src="images\Shot3.png" />
+                        <div class="overlay" style="background-color: #595959">
+                            <div class="overlayText">The best ways you can support your local artists</div>
+                        </div>
+                    </a>
                 </div>
 
                 <h1 style="padding-top: 1em;">MICROBLOG</h1>
@@ -232,20 +237,25 @@
 
         </div>
         <br>
+        
         <!--contains footer information, i.e.pages, social media links, contact-->
         <div class="footer">
 
+            <!--all social media links-->
             <div class="socialMedia">
                 <p>Social Media Links:</p><br/>
-                <img id="facebook" src="images\SM6.png" alt="Facebook Link">
-                <img id="twitter" src="images\SM2.png" alt="Twitter Link">
-                <img id="music" src="images\SM1.png" alt="Music Link">
-                <img id="youtube" src="images\SM3.png" alt="YouTube Link">
-                <img id="insta" src="images\SM4.png" alt="Instagram Link">
-                <img id="camera" src="images\SM5.png" alt="Camera Link">
+                <a href="#"><img id="facebook" src="images\SM6.png" alt="Facebook Link"></a>
+                <a href="#"><img id="twitter" src="images\SM2.png" alt="Twitter Link"></a>
+                <a href="#"><img id="music" src="images\SM1.png" alt="Music Link"></a>
+                <a href="#"><img id="youtube" src="images\SM3.png" alt="YouTube Link"></a>
+                <a href="#"><img id="insta" src="images\SM4.png" alt="Instagram Link"></a>
+                <a href="#"><img id="camera" src="images\SM5.png" alt="Camera Link"></a>
             </div>
 
+            <!--dummy copyright text-->
             <p id="policy"><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> | © <i>SecureMusic Int. Lmt. 2018</i></p>
+            
+            <!--links to other pages on the website-->
             <div class="footerLinks">
                 <ul>
                     <li><a href="index.jsp">Home</a></li>
@@ -257,10 +267,11 @@
                 </ul>
             </div>
 
+            <!--additional contact links, including mailto link-->
             <div class="contactLinks">
                 <ul>
                     <li>Phone: 0344-000-0000</li>
-                    <li>Email: customersupport@securemusic.com</li>
+                    <li>Email: <a href="mailto:customersupport@securemusic.com" target="_top">customersupport@securemusic.com</a></li>
                 </ul>
             </div>
 
