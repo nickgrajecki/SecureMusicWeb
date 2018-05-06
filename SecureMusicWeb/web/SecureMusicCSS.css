@@ -146,6 +146,21 @@ body {
     background-color: #717171;
 }
 
+.fav {
+    width: 70px;
+    height: 50px;
+    background: url(fav.png) no-repeat;
+    background-position: 0 0;
+}
+
+.fav:active {
+    background-position: -3519px 0;
+    transition: background 1s steps(55);
+    box-sizing: border-box;
+    width: 60px; /* Width of new image */
+    padding-left: 60px; /* Equal to width of new image */
+}
+
 /* Fading animation */
 .fade {
     -webkit-animation-name: fade;
@@ -290,33 +305,33 @@ button:hover, .newusersubmission:hover, .loginsubmission:hover {
 }
 
 .overlay {
-  display: inline-block;
-  top: 0;
-  margin: auto;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 100%;
-  opacity: 0;
-  transition: .5s ease;
-  background-color: #1e1e1e;
+    display: inline-block;
+    top: 0;
+    margin: auto;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    opacity: 0;
+    transition: .5s ease;
+    background-color: #1e1e1e;
 }
 
 .trend:hover .overlay {
-  opacity: 1;
+    opacity: 1;
 }
 
 .overlayText {
-  color: white;
-  font-size: 20px;
-  position: absolute;
-  display: inline-block;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  text-align: center;
+    color: white;
+    font-size: 20px;
+    position: absolute;
+    display: inline-block;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    text-align: center;
 }
 
 .contactForm {

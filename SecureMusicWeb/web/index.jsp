@@ -3,6 +3,7 @@
 <%@page import="java.sql.DriverManager"%>
 <%@page import="java.sql.DriverManager"%>
 <%@page import="java.sql.Connection"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 
@@ -220,9 +221,9 @@
                         || Posted at:
                         <%=rs.getString("time").substring(0, 16)%></p>
                     <%=rs.getString("title")%><br>
-                    <%=rs.getString("content")%><br>
-
+                    <%=rs.getString("content")%>
                 </div>
+                <section class="fav"><img src="fav2.png"</section>
                 <%
                     }
                 %>
@@ -252,7 +253,7 @@
             </div>
 
             <!--dummy copyright text-->
-            <p id="policy"><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> | © <i>SecureMusic Int. Lmt. 2018</i></p>
+            <p id="policy"><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> | Â© <i>SecureMusic Int. Lmt. 2018</i></p>
 
             <!--links to other pages on the website-->
             <div class="footerLinks">
