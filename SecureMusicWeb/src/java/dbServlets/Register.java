@@ -8,6 +8,7 @@ package dbServlets;
 import static SecurityClasses.PasswordHash.hashPass;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -38,6 +39,12 @@ public class Register extends HttpServlet {
             String regName = policy.sanitize(request.getParameter("newusername"));
             String regPass = hashPass(policy.sanitize(request.getParameter("newpassword")));
             String regEmail = policy.sanitize(request.getParameter("email")).replaceAll("&#64;", "@");
+            
+            //For random salting (in registration):
+            SecureRandom secRand = new SecureRandom();
+            byte[] salt = new byte[12];
+            secRand.nextBytes(salt);
+            
             String dbName, dbPassword, cmpHost, dbURL;
             try {
                 Class.forName("org.postgresql.Driver");
@@ -51,12 +58,13 @@ public class Register extends HttpServlet {
                 Statement stmt = connection.createStatement();
                 stmt.executeUpdate(SQL1);
                 
-                PreparedStatement ps = connection.prepareStatement("INSERT INTO dbuser VALUES (?, ?, ?, ?, ?)");
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO dbuser VALUES (?, ?, ?, ?, ?, ?)");
                 ps.setString(1, regName);
                 ps.setString(2, regPass);
                 ps.setString(3, regEmail);
                 ps.setInt(4, 0);
                 ps.setLong(5, System.currentTimeMillis());
+                ps.setString(6, secRand.toString());
                 ps.executeUpdate();
                 response.sendRedirect("index.jsp");
             } catch (ClassNotFoundException | SQLException ex) {
