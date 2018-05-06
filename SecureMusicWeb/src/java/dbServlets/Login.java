@@ -51,6 +51,9 @@ public class Login extends HttpServlet {
             //My failed attempt at IP flood control
             
 //            String IPAddress = InetAddress.getLocalHost().toString();
+
+//            It does a weird thing of 'COMPUTER NAME/IP ADDRESS' so I split it
+
 //            String[] IPparts = IPAddress.split("/");
 //            IPAddress = IPparts[1];
 //            int IPAttemptJ = 0;
