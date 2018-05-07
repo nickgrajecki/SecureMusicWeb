@@ -6,6 +6,7 @@
 package dbServlets;
 
 import static SecurityClasses.PasswordHash.hashPass;
+import SecurityClasses.Salt;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
@@ -40,7 +41,7 @@ public class Register extends HttpServlet {
 
             //Retrieve all values, sanitize them
             String regName = policy.sanitize(request.getParameter("newusername"));
-            String regPass = hashPass(policy.sanitize(request.getParameter("newpassword")));
+            String regPass = policy.sanitize(request.getParameter("newpassword"));
             String regEmail = policy.sanitize(request.getParameter("email")).replaceAll("&#64;", "@");
 
             try {
@@ -58,6 +59,7 @@ public class Register extends HttpServlet {
                 emailCheck.setString(1, regEmail);
                 ResultSet email = emailCheck.executeQuery();
                 boolean emailExists = email.next();
+
                 //Check if username exists
                 PreparedStatement usernameCheck = connection.prepareStatement("SELECT * from musicweb.dbuser WHERE username = ?");
                 usernameCheck.setString(1, regName);
@@ -68,12 +70,20 @@ public class Register extends HttpServlet {
                 if (loginExists || emailExists) {
                     request.setAttribute("registerMessage", "Username or email already taken.");
                 } else {
-                    PreparedStatement ps = connection.prepareStatement("INSERT INTO musicweb.dbuser VALUES (?, ?, ?, ?, ?)");
+                    //Generate salt for user
+                    Salt salt = new Salt();
+                    String genSalt = salt.saltToString(salt.generateSalt());
+                    String saltedPass = genSalt + regPass;
+                    String hashedPass = hashPass(saltedPass);
+                    
+                    //Insert user into db, including salt and hashed pass
+                    PreparedStatement ps = connection.prepareStatement("INSERT INTO musicweb.dbuser VALUES (?, ?, ?, ?, ?, ?)");
                     ps.setString(1, regName);
-                    ps.setString(2, regPass);
+                    ps.setString(2, hashedPass);
                     ps.setString(3, regEmail);
                     ps.setInt(4, 0);
                     ps.setLong(5, System.currentTimeMillis());
+                    ps.setString(6, genSalt);
                     ps.executeUpdate();
                     request.setAttribute("registerMessage", "Successfully registered");
                 }

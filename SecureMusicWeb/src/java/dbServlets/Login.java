@@ -36,7 +36,7 @@ public class Login extends HttpServlet {
         try {
             response.setContentType("text/html;charset=UTF-8");
             HttpSession session = request.getSession();
-            
+
             //Connect do DB
             String dbName, dbPassword, cmpHost, dbURL;
             Class.forName("org.postgresql.Driver");
@@ -45,17 +45,14 @@ public class Login extends HttpServlet {
             cmpHost = "cmpstudb-02.cmp.uea.ac.uk";
             dbURL = ("jdbc:postgresql://" + cmpHost + "/" + dbName);
             Connection connection = DriverManager.getConnection(dbURL, dbName, dbPassword);
-            
+
             //Set up HTML sanitizers to allow inline formatting and links only
             PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.LINKS);
             long currentTime = System.currentTimeMillis();
 
             //My failed attempt at IP flood control
-            
 //            String IPAddress = InetAddress.getLocalHost().toString();
-
 //            It does a weird thing of 'COMPUTER NAME/IP ADDRESS' so I split it
-
 //            String[] IPparts = IPAddress.split("/");
 //            IPAddress = IPparts[1];
 //            int IPAttemptJ = 0;
@@ -89,10 +86,18 @@ public class Login extends HttpServlet {
 //                }
 //            } catch (SQLException E) {
 //            }
-
             //Retrieve username and password, then hash it
             String logName = policy.sanitize(request.getParameter("username"));
-            String logPass = hashPass(policy.sanitize(request.getParameter("pass")));
+            String logPass = policy.sanitize(request.getParameter("pass"));
+
+            PreparedStatement psHash = connection.prepareStatement("SELECT salt FROM musicweb.dbuser WHERE username = ?");
+            psHash.setString(1, logName);
+            ResultSet rsHash = psHash.executeQuery();
+            rsHash.next();
+            String salt = rsHash.getString("salt");
+            
+            String saltedPass = salt + logPass;
+            String hashedPass = hashPass(saltedPass);
 
             //Retrieve number of failed logins and time of last attempt
             PreparedStatement ps1 = connection.prepareStatement("SELECT failed_attempts, last_attempt FROM musicweb.dbuser WHERE username = ?");
@@ -101,7 +106,7 @@ public class Login extends HttpServlet {
             rs.next();
             int failedAttempt = rs.getInt("failed_attempts");
             long failedTime = rs.getLong("last_attempt");
-            
+
             //Convert time from ms to minutes
             long timeLeft = (((currentTime - failedTime) / 1000) / 60);
             long timeRemaining = 30 - timeLeft;
@@ -116,14 +121,14 @@ public class Login extends HttpServlet {
             }
 
             //Allow login if details are correct and user isn't locked out
-            if (UserCheck.verifyUser(logName, logPass) && failedAttempt < 3) {
+            if (UserCheck.verifyUser(logName, hashedPass) && failedAttempt < 3) {
                 PreparedStatement ps = connection.prepareStatement("UPDATE musicweb.dbuser SET failed_attempts = 0 WHERE username = ?");
                 ps.setString(1, logName);
                 ps.executeUpdate();
                 session.setAttribute("username", logName);
                 session.setAttribute("isLoggedIn", true);
-                
-            //If details are incorrect
+
+                //If details are incorrect
             } else if (failedAttempt < 3) {
                 //Add +1 to failed attempts
                 PreparedStatement ps = connection.prepareStatement("UPDATE musicweb.dbuser SET failed_attempts = failed_attempts + 1 WHERE username = ?");
