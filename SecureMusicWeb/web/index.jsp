@@ -19,12 +19,6 @@
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script type="text/javascript" src="SecureMusicJS.js"></script>
-        <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=p6szcpxygu55ycfq39yga5wgs2vustj56sthnuidnu5heuja"></script>
-        <script>tinymce.init({
-                selector: 'textarea',
-                width: '480',
-                resize: 'both'});
-        </script>
     </head>
 
     <!--when page loads, JavaScript also loads-->
@@ -55,10 +49,10 @@
 
             <!--Login form requiring username and password-->
             <div class="loginSection">
-                <!--Checks if user is logged in - if he isnt, run code under-->
+                <!--Checks if user is logged in - if he isn't, run code under-->
                 <% if ((session.getAttribute("isLoggedIn") == null)) { %>
 
-                <!--Uses Javascript to swap between login and register tabs-->
+                <!--Uses JavaScript to swap between login and register tabs-->
                 <div class="loginRegister">
                     <button id="log" onclick="switchToLogin()"> Login </button>
                     <button id="reg" onclick="switchToRegister()"> Register </button>
@@ -67,47 +61,59 @@
                 <!--Login Form-->
                 <form id="login" class="tabContent" method="post" action="Login">
                     <fieldset>
-                        <h3>Enter your username and password</h3>
                         <!--Form only allows certain characters to be entered-->
-                        <label>Username: </label><input type="text" pattern="\w+" name="username" id="user" placeholder="Enter Username" required><br/>
-                        <label>Password: </label><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="pass" placeholder="Enter Password" id="password"><br/>
-                        <p><a href="reset.html">Forgotten Password?</a></p>
-                        ${invalidMessage}
-                        <input class="loginsubmission" type="submit" value="Login" />
+                        <div class="loginreg">
+                            <h3>Enter your username and password</h3>
+                            <form action="Login">
+                                <label>Username: </label><input type="text" pattern="\w+" name="username" id="user" placeholder="Enter Username" required><br/>
+                                <label>Password: </label><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="pass" placeholder="Enter Password" id="password"><br/>
+                                <p><a href="reset.html">Forgotten Password?</a></p>
+                                <input class="loginsubmission" type="submit" value="Login" />
+                                <div class="formmessage">${invalidMessage}</div>
+                            </form>
+                        </div>
                     </fieldset>
                 </form>
 
                 <!--Register Form-->
                 <form id="register" class="tabContent" method="post" action="Register">
                     <fieldset>
-                        <h3>Create your username and password</h3>
-                        <!--Form only allows certain characters to be entered-->
-                        <label>Username: </label><input type="text" pattern="\w+" name="newusername" id="newuser" placeholder="Enter Username" required onclick = hideSetPassword()><br/>
-                        <label>Email: </label><input type="text" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}" name="email" placeholder="nickgrajecki@compuserve.com" id="email" required><br/>
-                        <label>Password: </label><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="newpassword" placeholder="Enter Password" id="newpass" onclick = setPassword()><br/>
-                        <div id="passwordReminder">
-                            <p>Password must contain at least:</p>
-                            <ul id="passwordList">
-                                <li>One uppercase letter</li>
-                                <li>One lowercase letter</li>
-                                <li>One number</li>
-                                <li>Eight characters</li>
-                            </ul>
+                        <div class="loginreg">
+                            <h3>Create your username and password</h3>
+                            <!--Form only allows certain characters to be entered-->
+                            <label>Username: </label><input type="text" pattern="\w+" name="newusername" id="newuser" placeholder="Enter Username" required onclick = hideSetPassword()><br/>
+                            <label>Email: </label><input type="text" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}" name="email" placeholder="nickgrajecki@compuserve.com" id="email" required><br/>
+
+                            <div class="popup" onclick="popupPass()">
+                                <label>Password: </label><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="newpassword" placeholder="Enter Password" id="newpass" onclick = setPassword()><br/>
+                                <span class="popuptext" id="popupReminder">                            
+                                    Password must contain at least:
+                                    <ul id="passwordList">
+                                        <li>One uppercase letter</li>
+                                        <li>One lowercase letter</li>
+                                        <li>One number</li>
+                                        <li>Eight characters</li>
+                                    </ul>
+                                </span>
+                            </div>
+
+                            ${registerMessage}
+                            <input class="newusersubmission" type="submit" value="Register" />
                         </div>
-                        ${registerMessage}
-                        <input class="newusersubmission" type="submit" value="Register" />
                     </fieldset>
                 </form>
 
                 <!--Checks if user is logged in - if so, run code under-->
                 <% } else {%>
-                > Welcome, ${username}!<br>
-                <form action="Logout" method="post">
-                    <button type="submit" name="logout" value="logout" class="btn-link">Log out</button>
-                </form>
-                <form action="profile.jsp" method="post">
-                    <button type="submit" name="profile" value="profile" class="btn-link">Profile</button>
-                </form>
+                <div class="loginregIn">
+                    <p> > Welcome, ${username}!</p>
+                    <form id="loggedF" action="Logout" method="post">
+                        <button id="logoutB" type="submit" name="logout" value="logout">Log out</button>
+                    </form>
+                    <form id="loggedF" action="profile.jsp" method="post">
+                        <button id="profileB" type="submit" name="profile" value="profile">Profile</button>
+                    </form>
+                </div>
             </div>
             <% }%>
         </div> 

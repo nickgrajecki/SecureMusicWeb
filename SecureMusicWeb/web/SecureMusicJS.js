@@ -79,4 +79,9 @@ function showSlides() {
     }
     slides[slideIndex - 1].style.display = "block";
     setTimeout(showSlides, 5000);
-    }
+}
+
+function popupPass() {
+    var pop = document.getElementById("popupReminder");
+    pop.classList.toggle("show");
+}

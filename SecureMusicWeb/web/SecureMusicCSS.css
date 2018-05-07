@@ -189,7 +189,6 @@ body {
 .loginSection {
     width: 16%;
     float: right;
-    border: 2px solid white;
     padding-left: 1em;
     padding-right: 1em;
     padding-top: 1em;
@@ -206,11 +205,19 @@ body {
 }
 
 #reg {
-    margin-left: 50%;
+    width: 40%;
+    margin-left: 0%;
+    border: transparent;
+    background: #3f7ba8;
+    border-radius: 15px;
 }
 
 #log {
-    margin-left: 5%;
+    width: 40%;
+    margin-left: 8%;
+    border: transparent;
+    background: #3f7ba8;
+    border-radius: 15px;
 }
 
 #reg, #log {
@@ -223,7 +230,7 @@ fieldset {
 
 /*Styling for content of login and register tabs*/
 .tabContent {
-    text-align: right;
+    text-align: left;
 }
 
 /*Login/register submission button styling*/
@@ -256,6 +263,7 @@ button:hover, .newusersubmission:hover, .loginsubmission:hover {
 
 #passwordList {
     list-style-type: none;
+    float: left;
 }
 
 /*Main CSS*/
@@ -438,15 +446,116 @@ table, th, td {
     color: darkgray;
 }
 
-.fakeimg {
-    background-color: #aaa;
-    width: 10%;
-    padding: 10px;
+.loginreg {
+    position: relative;
+    width: 200px;
+    height: 440px;
+    padding: 2px 25px 0 25px;
+    background-color: #474544;
+    border-radius: 15px;
 }
 
-/* Add a card effect for articles */
-.card {
-    background-color: white;
-    padding: 10px;
-    margin-top: 10px;
+.loginregIn {
+    position: relative;
+    width: 200px;
+    height: 110px;
+    padding: 2px 25px 0 25px;
+    background-color: #474544;
+    border-radius: 15px;
+}
+
+#profileB {
+    width: 48%;
+    margin-left: 0%;
+    border: transparent;
+    background: #3f7ba8;
+    border-radius: 15px;
+}
+
+#logoutB{
+    width: 47%;
+    margin-left: 0%;
+    border: transparent;
+    background: #3f7ba8;
+    border-radius: 15px;
+}
+
+#loggedF{
+    display: inline;
+}
+
+.loginreg input[type=text],
+.loginreg input[type=password],
+.loginreg input[type=submit] {
+    line-height: 17px;
+    margin: 10px 0;
+    padding: 5px 25px;
+    border: 0;
+    border-radius: 30px;
+    transition: all .30s ease-in-out;
+}
+
+.loginreg input[type=text]:focus,
+.loginreg input[type=password]:focus {
+    background: #e1e1e1;
+}
+
+.loginreg input[type=submit] {
+    float: right;
+    color: white;
+    background: #3f7ba8;
+    box-shadow: inset 1px 1px 1px 0px rgba(255,255,255, .45), 0px 1px 1px 0px rgba(0,0,0, .3);
+}
+
+.loginreg div[class=formmessage]{
+    float: right;
+}
+.loginreg div[id=passwordReminder]{
+    float: right;
+}
+
+.popup {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.popup .popuptext{
+    visibility: hidden;
+    width: 200px;
+    background-color: #969fa5;
+    color: #fff;
+    text-align: center;
+    border-radius: 10px;
+    padding: 0px 0;
+    position: absolute;
+    bottom: 60%;
+    left: 40%;
+    margin-left: -50px;
+}
+
+.popup ul {
+    text-align: left;
+    width: 200px;
+    background-color: #969fa5;
+    color: #fff;
+    text-align: center;
+    border-radius: 10px;
+    padding: 10px 0;
+}
+
+.popup .popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #969fa5 transparent transparent transparent;
+}
+
+.popup .show {
+    visibility: visible;
+    animation: fadeIn 2s
 }
