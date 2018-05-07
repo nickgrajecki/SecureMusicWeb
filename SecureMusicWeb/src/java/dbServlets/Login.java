@@ -7,7 +7,6 @@ package dbServlets;
 
 import static SecurityClasses.PasswordHash.hashPass;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -31,12 +30,14 @@ import org.owasp.html.*;
 @WebServlet(urlPatterns = {"/Login"})
 public class Login extends HttpServlet {
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             response.setContentType("text/html;charset=UTF-8");
             HttpSession session = request.getSession();
-
+            
+            //Connect do DB
             String dbName, dbPassword, cmpHost, dbURL;
             Class.forName("org.postgresql.Driver");
             dbName = "groupcz";
@@ -44,6 +45,7 @@ public class Login extends HttpServlet {
             cmpHost = "cmpstudb-02.cmp.uea.ac.uk";
             dbURL = ("jdbc:postgresql://" + cmpHost + "/" + dbName);
             Connection connection = DriverManager.getConnection(dbURL, dbName, dbPassword);
+            
             //Set up HTML sanitizers to allow inline formatting and links only
             PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.LINKS);
             long currentTime = System.currentTimeMillis();
@@ -88,19 +90,24 @@ public class Login extends HttpServlet {
 //            } catch (SQLException E) {
 //            }
 
+            //Retrieve username and password, then hash it
             String logName = policy.sanitize(request.getParameter("username"));
             String logPass = hashPass(policy.sanitize(request.getParameter("pass")));
 
+            //Retrieve number of failed logins and time of last attempt
             PreparedStatement ps1 = connection.prepareStatement("SELECT failed_attempts, last_attempt FROM musicweb.dbuser WHERE username = ?");
             ps1.setString(1, logName);
             ResultSet rs = ps1.executeQuery();
             rs.next();
             int failedAttempt = rs.getInt("failed_attempts");
             long failedTime = rs.getLong("last_attempt");
+            
+            //Convert time from ms to minutes
             long timeLeft = (((currentTime - failedTime) / 1000) / 60);
             long timeRemaining = 30 - timeLeft;
             boolean timeElapsed = timeLeft > 30;
 
+            //If 30 minutes elapsed, unlock the user, reset attempt count
             if (timeElapsed && failedAttempt >= 3) {
                 PreparedStatement ps = connection.prepareStatement("UPDATE musicweb.dbuser SET failed_attempts = 0 WHERE username = ?");
                 ps.setString(1, logName);
@@ -108,26 +115,31 @@ public class Login extends HttpServlet {
                 failedAttempt = 0;
             }
 
+            //Allow login if details are correct and user isn't locked out
             if (UserCheck.verifyUser(logName, logPass) && failedAttempt < 3) {
                 PreparedStatement ps = connection.prepareStatement("UPDATE musicweb.dbuser SET failed_attempts = 0 WHERE username = ?");
                 ps.setString(1, logName);
                 ps.executeUpdate();
                 session.setAttribute("username", logName);
-                request.setAttribute("username", logName);
                 session.setAttribute("isLoggedIn", true);
+                
+            //If details are incorrect
             } else if (failedAttempt < 3) {
+                //Add +1 to failed attempts
                 PreparedStatement ps = connection.prepareStatement("UPDATE musicweb.dbuser SET failed_attempts = failed_attempts + 1 WHERE username = ?");
                 ps.setString(1, logName);
                 ps.executeUpdate();
                 if (failedAttempt < 2) {
                     request.setAttribute("invalidMessage", "Password or username invalid. You have " + (2 - failedAttempt) + " attempts left.");
                 } else {
+                    //If this was the last allowed attempt, time-lock account
                     PreparedStatement ps2 = connection.prepareStatement("UPDATE musicweb.dbuser SET last_attempt = ? WHERE username = ?");
                     ps2.setLong(1, currentTime);
                     ps2.setString(2, logName);
                     ps2.executeUpdate();
                     request.setAttribute("invalidMessage", "Too many failed attempts. Your account has been locked out");
                 }
+                //If failed attempts over allowed threshold
             } else if (failedAttempt >= 3) {
                 request.setAttribute("invalidMessage", "Account locked. Time remaining: " + timeRemaining + " minutes");
             }

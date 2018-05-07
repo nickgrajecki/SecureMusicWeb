@@ -34,9 +34,8 @@
         <div class="nav">
             <ul class="navigationBar">
                 <li id='navli'><a href="index.jsp">Home</a></li>
-                <li id='navli'><a href="blog.html">Blog</a></li>
+                <li id='navli'><a href="blog.jsp">Blog</a></li>
                 <li id='navli'><a href="news.html">News</a></li>
-                <li id='navli'><a href="loginregister.html">Login/Register</a></li>
                 <li id='navli'><a href="profile.jsp">Profile</a></li>
                 <li id='navli'><a href="contact.html">Contact Us</a></li>
             </ul>
@@ -95,6 +94,7 @@
                                 <li>Eight characters</li>
                             </ul>
                         </div>
+                        ${registerMessage}
                         <input class="newusersubmission" type="submit" value="Register" />
                     </fieldset>
                 </form>
@@ -177,67 +177,9 @@
                     </div>
                 </a>
             </div>
-
-            <h1 style="padding-top: 1em;">MICROBLOG</h1>
-            <div class="microblog">
-            </div>
-
         </div>
-
         <!--div containing forum directory in the form of links-->
-
-        <!-- Checks if logged in, if not, displays message, otherwise shows posts and allows to make new one --> 
-        <div class="blogs">
-            <% if ((session.getAttribute("isLoggedIn") == null)) { %>
-            <p id="loginrequest">Please log in or register to view or create new blog posts</p>
-            <% } else {%>
-            <form id ="blogSubmit" method="post" action="PostBlog">
-                <h3>Create your blog post</h3>
-                <!--Form only allows certain characters to be entered-->
-                <label>Blog title: </label><input type="text" name="blogtitle" id="blogtitle" placeholder="Enter Blog Title"><br/>
-                <textarea type="text" name="blogcontent"></textarea>
-                <input class="button" type="submit" value="Post" />
-            </form><br>
-            <div>
-                <%
-                    try {
-                        Class.forName("org.postgresql.Driver");
-                        String dbName, dbPassword, cmpHost, dbURL;
-                        dbName = "groupcz";
-                        dbPassword = "groupcz";
-                        cmpHost = "cmpstudb-02.cmp.uea.ac.uk";
-                        dbURL = ("jdbc:postgresql://" + cmpHost + "/" + dbName);
-                        Connection connection = DriverManager.getConnection(dbURL, dbName, dbPassword);
-                        Statement stmt = connection.createStatement();
-                        String SQL1 = "SET search_path TO musicweb";
-                        stmt.executeUpdate(SQL1);
-                        String SQL2 = "SELECT * FROM blogs";
-                        ResultSet rs = stmt.executeQuery(SQL2);
-                        while (rs.next()) {
-
-                %>
-                <div class="blogposts">
-                    <p> <%=rs.getString("username")%>
-                        || Posted at:
-                        <%=rs.getString("time").substring(0, 16)%></p>
-                    <%=rs.getString("title")%><br>
-                    <%=rs.getString("content")%>
-                </div>
-                <section class="fav"><img src="fav2.png"</section>
-                <%
-                    }
-                %>
-                <%
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                %>
-                <% }%>
-            </div>
-
-        </div>
         <br>
-
         <!--contains footer information, i.e.pages, social media links, contact-->
         <div class="footer">
 
@@ -259,9 +201,8 @@
             <div class="footerLinks">
                 <ul>
                     <li><a href="index.jsp">Home</a></li>
-                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="blog.jsp">Blog</a></li>
                     <li><a href="news.html">News</a></li>
-                    <li><a href="loginregister.html">Login/Register</a></li>
                     <li><a href="profile.jsp">Profile</a></li>
                     <li><a href="contact.html">Contact Us</a></li>
                 </ul>

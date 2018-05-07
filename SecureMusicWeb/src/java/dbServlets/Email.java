@@ -6,18 +6,15 @@
 package dbServlets;
 
 import static SecurityClasses.PasswordHash.hashPass;
-import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Properties;
-import java.lang.Object;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,25 +36,36 @@ import org.owasp.html.Sanitizers;
 @WebServlet(urlPatterns = {"/Email"})
 public class Email extends HttpServlet {
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        //Set up email details
         final String username = "securemusicweb@gmail.com";
         final String password = "WenjiaWang2018";
-        
+
         //Set up HTML sanitizers to allow inline formatting and links only
         PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.LINKS);
 
         String resetUser = policy.sanitize(request.getParameter("username"));
         String resetEmail = policy.sanitize(request.getParameter("email")).replaceAll("&#64;", "@");
 
+        /*Generate random 8 char string + append lowercase and uppercase to 
+        match password requirements*/
         UUID randomGen = UUID.randomUUID();
         log("UUID One: " + randomGen);
         String newPass = "T" + randomGen.toString().substring(0, 7) + "f";
-        
-        
+
         String dbName, dbPassword, cmpHost, dbURL;
-        boolean found = false;
+
         try {
+            //Connect to DB
             Class.forName("org.postgresql.Driver");
             dbName = "groupcz";
             dbPassword = "groupcz";
@@ -65,52 +73,53 @@ public class Email extends HttpServlet {
             dbURL = ("jdbc:postgresql://" + cmpHost + "/" + dbName);
             Connection connection = DriverManager.getConnection(dbURL, dbName, dbPassword);
 
-            String SQL1 = "SET search_path TO musicweb";
-            Statement stmt = connection.createStatement();
-            stmt.executeUpdate(SQL1);
-            
+            //Hash the newly generated temporary password
             String hashPass = hashPass(newPass);
 
-            PreparedStatement ps = connection.prepareStatement("SELECT * from dbuser WHERE username = ? AND email = ?");
+            //Check if user exists in database 
+            PreparedStatement ps = connection.prepareStatement("SELECT * from musicweb.dbuser WHERE username = ? AND email = ?");
             ps.setString(1, resetUser);
             ps.setString(2, resetEmail);
             ResultSet rs = ps.executeQuery();
-            found = rs.next();
+            //Assign true to found if there is a result
+            boolean found = rs.next();
 
-            ps = connection.prepareStatement("UPDATE dbuser SET password = ? WHERE username = ?");
-            ps.setString(1, hashPass);
-            ps.setString(2, resetUser);
-            ps.executeUpdate();
-        } catch (ClassNotFoundException | SQLException e) {
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(Email.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        if (found) {
-            Properties props = new Properties();
-            props.put("mail.smtp.auth", "true");
-            props.put("mail.smtp.starttls.enable", "true");
-            props.put("mail.smtp.host", "smtp.gmail.com");
-            props.put("mail.smtp.port", "587");
+            //If user found, update password and send email
+            if (found) {
+                ps = connection.prepareStatement("UPDATE musicweb.dbuser SET password = ? WHERE username = ?");
+                ps.setString(1, hashPass);
+                ps.setString(2, resetUser);
+                ps.executeUpdate();
 
-            Session session = Session.getInstance(props,
-                    new javax.mail.Authenticator() {
-                protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(username, password);
-                }
-            });
-            try {
-                Message message = new MimeMessage(session);
-                message.setFrom(new InternetAddress("securemusicweb@gmail.com"));
-                message.setRecipients(Message.RecipientType.TO,
+                //Setup Gmail properties for sending emails
+                Properties emailProperties = new Properties();
+                emailProperties.put("mail.smtp.auth", "true");
+                emailProperties.put("mail.smtp.starttls.enable", "true");
+                emailProperties.put("mail.smtp.host", "smtp.gmail.com");
+                emailProperties.put("mail.smtp.port", "587");
+
+                Session session = Session.getInstance(emailProperties, new javax.mail.Authenticator() {
+                    @Override
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
+                
+                //Send email with new password (unhashed)
+                Message emailMessage = new MimeMessage(session);
+                emailMessage.setFrom(new InternetAddress("securemusicweb@gmail.com"));
+                emailMessage.setRecipients(Message.RecipientType.TO,
                         InternetAddress.parse(resetEmail));
-                message.setSubject("You requested a password reset");
-                message.setText("Dear " + resetUser
+                emailMessage.setSubject("You requested a password reset");
+                emailMessage.setText("Dear " + resetUser
                         + ",\n\nYou have recently requested a password reset.\n"
                         + "Please use this to log in and change your password \n\n"
                         + "Your temporary password is: \n" + newPass
                         + "\nIf you hadn't requested a password reset, "
                         + "please contact the website administrator.\n\n - SecureMusicWeb");
-                Transport.send(message);
+                Transport.send(emailMessage);
+                
+                //Redirect to a confirmation page, return to index after 3s
                 try (PrintWriter out = response.getWriter()) {
                     out.println("<!DOCTYPE html>");
                     out.println("<html>");
@@ -123,11 +132,9 @@ public class Email extends HttpServlet {
                     out.println("</body>");
                     out.println("</html>");
                 }
-            } catch (MessagingException e) {
-                throw new RuntimeException(e);
             }
-        } else {
-
+        } catch (ClassNotFoundException | SQLException | NoSuchAlgorithmException | MessagingException ex) {
+            Logger.getLogger(Email.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

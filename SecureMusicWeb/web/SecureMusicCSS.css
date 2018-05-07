@@ -437,3 +437,16 @@ table, th, td {
 .loginSection fieldset a:hover {
     color: darkgray;
 }
+
+.fakeimg {
+    background-color: #aaa;
+    width: 10%;
+    padding: 10px;
+}
+
+/* Add a card effect for articles */
+.card {
+    background-color: white;
+    padding: 10px;
+    margin-top: 10px;
+}

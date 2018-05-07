@@ -11,6 +11,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
@@ -20,6 +21,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.owasp.html.PolicyFactory;
 import org.owasp.html.Sanitizers;
 
@@ -30,35 +32,52 @@ public class Register extends HttpServlet {
             throws ServletException, IOException {
         try {
             response.setContentType("text/html;charset=UTF-8");
-            
+            HttpSession session = request.getSession();
+
             //Set up HTML sanitizers to allow inline formatting and links only
             //Source: OWASP Java HTML Sanitizer Project
             PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.LINKS).and(Sanitizers.TABLES);
-            
+
+            //Retrieve all values, sanitize them
             String regName = policy.sanitize(request.getParameter("newusername"));
             String regPass = hashPass(policy.sanitize(request.getParameter("newpassword")));
             String regEmail = policy.sanitize(request.getParameter("email")).replaceAll("&#64;", "@");
-            String dbName, dbPassword, cmpHost, dbURL;
+
             try {
+                //Connect do DB
+                String dbName, dbPassword, cmpHost, dbURL;
                 Class.forName("org.postgresql.Driver");
                 dbName = "groupcz";
                 dbPassword = "groupcz";
                 cmpHost = "cmpstudb-02.cmp.uea.ac.uk";
                 dbURL = ("jdbc:postgresql://" + cmpHost + "/" + dbName);
                 Connection connection = DriverManager.getConnection(dbURL, dbName, dbPassword);
-                
-                String SQL1 = "SET search_path TO musicweb";
-                Statement stmt = connection.createStatement();
-                stmt.executeUpdate(SQL1);
-                
-                PreparedStatement ps = connection.prepareStatement("INSERT INTO dbuser VALUES (?, ?, ?, ?, ?)");
-                ps.setString(1, regName);
-                ps.setString(2, regPass);
-                ps.setString(3, regEmail);
-                ps.setInt(4, 0);
-                ps.setLong(5, System.currentTimeMillis());
-                ps.executeUpdate();
-                response.sendRedirect("index.jsp");
+
+                //Check if email exists
+                PreparedStatement emailCheck = connection.prepareStatement("SELECT * from musicweb.dbuser WHERE email = ?");
+                emailCheck.setString(1, regEmail);
+                ResultSet email = emailCheck.executeQuery();
+                boolean emailExists = email.next();
+                //Check if username exists
+                PreparedStatement usernameCheck = connection.prepareStatement("SELECT * from musicweb.dbuser WHERE username = ?");
+                usernameCheck.setString(1, regName);
+                ResultSet login = usernameCheck.executeQuery();
+                boolean loginExists = login.next();
+
+                //If login or email or both already exist, return with error
+                if (loginExists || emailExists) {
+                    request.setAttribute("registerMessage", "Username or email already taken.");
+                } else {
+                    PreparedStatement ps = connection.prepareStatement("INSERT INTO musicweb.dbuser VALUES (?, ?, ?, ?, ?)");
+                    ps.setString(1, regName);
+                    ps.setString(2, regPass);
+                    ps.setString(3, regEmail);
+                    ps.setInt(4, 0);
+                    ps.setLong(5, System.currentTimeMillis());
+                    ps.executeUpdate();
+                    request.setAttribute("registerMessage", "Successfully registered");
+                }
+                request.getRequestDispatcher("index.jsp").forward(request, response);
             } catch (ClassNotFoundException | SQLException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -67,13 +86,5 @@ public class Register extends HttpServlet {
             Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
         }
         //
-    }
-    public static void main(String[] args) {
-        String password = "password";
-        try {
-            System.out.println(hashPass(password));
-        } catch(NoSuchAlgorithmException e) {
-            System.out.println(e);
-        }
     }
 }

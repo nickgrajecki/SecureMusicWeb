@@ -6,6 +6,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,17 +27,20 @@ public class PostBlog extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String dbName, dbPassword, cmpHost, dbURL;
+
         HttpSession session = request.getSession();
-        
+
         //Set up HTML sanitizers to allow inline formatting and links only
         PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.LINKS);
-        
+
+        //If user is logged in
         if (session.getAttribute("isLoggedIn") != null) {
             String blogTitle = policy.sanitize(request.getParameter("blogtitle"));
             String blogContent = policy.sanitize(request.getParameter("blogcontent"));
             String username = policy.sanitize(session.getAttribute("username").toString());
             try {
+                //Connect to DB
+                String dbName, dbPassword, cmpHost, dbURL;
                 Class.forName("org.postgresql.Driver");
                 dbName = "groupcz";
                 dbPassword = "groupcz";
@@ -43,20 +48,16 @@ public class PostBlog extends HttpServlet {
                 dbURL = ("jdbc:postgresql://" + cmpHost + "/" + dbName);
                 Connection connection = DriverManager.getConnection(dbURL, dbName, dbPassword);
 
-                String SQL1 = "SET search_path TO musicweb";
-                Statement stmt = connection.createStatement();
-                stmt.executeUpdate(SQL1);
-                
-                String SQL2 = "INSERT INTO blogs (username, content, title) VALUES (?, ?, ?)";
-                PreparedStatement ps = connection.prepareStatement(SQL2);
+                //Insert blog into database, time is added automatically in Postgres
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO musicweb.blogs (username, content, title) VALUES (?, ?, ?)");
                 ps.setString(1, username);
                 ps.setString(2, blogContent);
                 ps.setString(3, blogTitle);
                 ps.executeUpdate();
                 response.sendRedirect("index.jsp");
             } catch (ClassNotFoundException | SQLException e) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, e);
             }
-            
         }
     }
 }
