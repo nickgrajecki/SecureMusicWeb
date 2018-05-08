@@ -148,32 +148,12 @@ body {
     background-color: #717171;
 }
 
-.fav {
-    width: 70px;
-    height: 50px;
-    background: url(fav.png) no-repeat;
-    background-position: 0 0;
-}
-
-.fav:active {
-    background-position: -3519px 0;
-    transition: background 1s steps(55);
-    box-sizing: border-box;
-    width: 60px; /* Width of new image */
-    padding-left: 60px; /* Equal to width of new image */
-}
-
 /* Fading animation */
 .fade {
     -webkit-animation-name: fade;
     -webkit-animation-duration: 1.5s;
     animation-name: fade;
     animation-duration: 1.5s;
-}
-
-@-webkit-keyframes fade {
-    from {opacity: .4} 
-    to {opacity: 1}
 }
 
 @keyframes fade {
@@ -586,4 +566,12 @@ table, th, td {
 .popup .show {
     visibility: visible;
     animation: fadeIn 2s
+}
+
+#changepass {
+    float: left;
+}
+
+#changeemail {
+    float: right;
 }

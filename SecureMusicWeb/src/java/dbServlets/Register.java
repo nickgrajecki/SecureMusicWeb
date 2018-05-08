@@ -43,49 +43,58 @@ public class Register extends HttpServlet {
             String regName = policy.sanitize(request.getParameter("newusername"));
             String regPass = policy.sanitize(request.getParameter("newpassword"));
             String regEmail = policy.sanitize(request.getParameter("email")).replaceAll("&#64;", "@");
+            
+            
+            //Confirm if email and pass meet expected format, return error message if not
+            boolean correctEmail = regEmail.matches("[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}");
+            boolean correctPassword = regPass.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(.{8,15})$");
 
             try {
-                //Connect do DB
-                String dbName, dbPassword, cmpHost, dbURL;
-                Class.forName("org.postgresql.Driver");
-                dbName = "groupcz";
-                dbPassword = "groupcz";
-                cmpHost = "cmpstudb-02.cmp.uea.ac.uk";
-                dbURL = ("jdbc:postgresql://" + cmpHost + "/" + dbName);
-                Connection connection = DriverManager.getConnection(dbURL, dbName, dbPassword);
+                if (correctEmail && correctPassword) {
+                    //Connect do DB
+                    String dbName, dbPassword, cmpHost, dbURL;
+                    Class.forName("org.postgresql.Driver");
+                    dbName = "groupcz";
+                    dbPassword = "groupcz";
+                    cmpHost = "cmpstudb-02.cmp.uea.ac.uk";
+                    dbURL = ("jdbc:postgresql://" + cmpHost + "/" + dbName);
+                    Connection connection = DriverManager.getConnection(dbURL, dbName, dbPassword);
 
-                //Check if email exists
-                PreparedStatement emailCheck = connection.prepareStatement("SELECT * from musicweb.dbuser WHERE email = ?");
-                emailCheck.setString(1, regEmail);
-                ResultSet email = emailCheck.executeQuery();
-                boolean emailExists = email.next();
+                    //Check if email exists
+                    PreparedStatement emailCheck = connection.prepareStatement("SELECT * from musicweb.dbuser WHERE email = ?");
+                    emailCheck.setString(1, regEmail);
+                    ResultSet email = emailCheck.executeQuery();
+                    boolean emailExists = email.next();
 
-                //Check if username exists
-                PreparedStatement usernameCheck = connection.prepareStatement("SELECT * from musicweb.dbuser WHERE username = ?");
-                usernameCheck.setString(1, regName);
-                ResultSet login = usernameCheck.executeQuery();
-                boolean loginExists = login.next();
+                    //Check if username exists
+                    PreparedStatement usernameCheck = connection.prepareStatement("SELECT * from musicweb.dbuser WHERE username = ?");
+                    usernameCheck.setString(1, regName);
+                    ResultSet login = usernameCheck.executeQuery();
+                    boolean loginExists = login.next();
 
-                //If login or email or both already exist, return with error
-                if (loginExists || emailExists) {
-                    request.setAttribute("registerMessage", "Username or email already taken.");
+                    //If login or email or both already exist, return with error
+                    if (loginExists || emailExists) {
+                        request.setAttribute("registerMessage", "Username or email already taken.");
+                    } else {
+                        //Generate salt for user
+                        Salt salt = new Salt();
+                        String genSalt = salt.saltToString(salt.generateSalt());
+                        String saltedPass = genSalt + regPass;
+                        String hashedPass = hashPass(saltedPass);
+
+                        //Insert user into db, including salt and hashed pass
+                        PreparedStatement ps = connection.prepareStatement("INSERT INTO musicweb.dbuser VALUES (?, ?, ?, ?, ?, ?)");
+                        ps.setString(1, regName);
+                        ps.setString(2, hashedPass);
+                        ps.setString(3, regEmail);
+                        ps.setInt(4, 0);
+                        ps.setLong(5, System.currentTimeMillis());
+                        ps.setString(6, genSalt);
+                        ps.executeUpdate();
+                        request.setAttribute("registerMessage", "Successfully registered");
+                    }
                 } else {
-                    //Generate salt for user
-                    Salt salt = new Salt();
-                    String genSalt = salt.saltToString(salt.generateSalt());
-                    String saltedPass = genSalt + regPass;
-                    String hashedPass = hashPass(saltedPass);
-                    
-                    //Insert user into db, including salt and hashed pass
-                    PreparedStatement ps = connection.prepareStatement("INSERT INTO musicweb.dbuser VALUES (?, ?, ?, ?, ?, ?)");
-                    ps.setString(1, regName);
-                    ps.setString(2, hashedPass);
-                    ps.setString(3, regEmail);
-                    ps.setInt(4, 0);
-                    ps.setLong(5, System.currentTimeMillis());
-                    ps.setString(6, genSalt);
-                    ps.executeUpdate();
-                    request.setAttribute("registerMessage", "Successfully registered");
+                    request.setAttribute("registerMessage", "Email or password do not match requirements");
                 }
                 request.getRequestDispatcher("index.jsp").forward(request, response);
             } catch (ClassNotFoundException | SQLException ex) {

@@ -13,6 +13,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -95,7 +96,7 @@ public class Login extends HttpServlet {
             ResultSet rsHash = psHash.executeQuery();
             rsHash.next();
             String salt = rsHash.getString("salt");
-            
+
             String saltedPass = salt + logPass;
             String hashedPass = hashPass(saltedPass);
 
@@ -135,20 +136,22 @@ public class Login extends HttpServlet {
                 ps.setString(1, logName);
                 ps.executeUpdate();
                 if (failedAttempt < 2) {
-                    request.setAttribute("invalidMessage", "Password or username invalid. You have " + (2 - failedAttempt) + " attempts left.");
+                    request.setAttribute("invalidMessage", "Password or username invalid");
                 } else {
-                    //If this was the last allowed attempt, time-lock account
+                    //If this was the last allowed attempt, time-lock account and send email
                     PreparedStatement ps2 = connection.prepareStatement("UPDATE musicweb.dbuser SET last_attempt = ? WHERE username = ?");
                     ps2.setLong(1, currentTime);
                     ps2.setString(2, logName);
                     ps2.executeUpdate();
-                    request.setAttribute("invalidMessage", "Too many failed attempts. Your account has been locked out");
+                    request.setAttribute("invalidMessage", "Password or username invalid");
+                    
                 }
                 //If failed attempts over allowed threshold
             } else if (failedAttempt >= 3) {
-                request.setAttribute("invalidMessage", "Account locked. Time remaining: " + timeRemaining + " minutes");
+                request.setAttribute("invalidMessage", "Password or username invalid");
             }
             request.getRequestDispatcher("index.jsp").forward(request, response);
+
         } catch (NoSuchAlgorithmException | ClassNotFoundException | SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }

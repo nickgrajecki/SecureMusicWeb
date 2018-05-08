@@ -41,19 +41,32 @@
         <!--header background is separate from the div for easier styling-->
         <img class="headerBackground" src="images\header1.jpg" alt="Header Background">
 
-        <h3 onload="greeting()"> ${username}! </h3><br>
-        Change password below<br>
-        <form id="passchange" class="tabContent" method="post" action="ChangePass">
-            <fieldset>
-                <label>Current password: </label><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="currentpass" placeholder="Enter Current Password" id="password"><br/>
-                <label>New Password: </label><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="newpass" placeholder="Enter New Password" id="password"><br/>
-                <label>Confirm New Password: </label><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="confirmpass" placeholder="Confirm New Password" id="password"><br/>
-                <input class="loginsubmission" type="submit" value="Confirm" />
-                ${confirmPassMessage}
-            </fieldset>
-        </form>
-        -----------------------<br>        
-        <!-- Insert form to change password -->
+        <h3 onload="greeting()"> Welcome to your profile page,
+            <%=session.getAttribute("username")%>! </h3>
+        <div id= "changepass">Change password below
+            <form id="passchange" class="tabContent" method="post" action="ChangePass">
+                <fieldset>
+                    <label>Current password: </label><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="currentpass" placeholder="Enter Current Password" id="password"><br/>
+                    <label>New Password: </label><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="newpass" placeholder="Enter New Password" id="password"><br/>
+                    <label>Confirm New Password: </label><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="confirmpass" placeholder="Confirm New Password" id="password"><br/>
+                    <input class="loginsubmission" type="submit" value="Confirm" />
+                    ${confirmPassMessage}
+                </fieldset>
+            </form>
+        </div>      
+
+        <div id= "changeemail">Change email below
+            <form id="passchange" class="tabContent" method="post" action="ChangeEmail">
+                <fieldset>
+                    <label>Current Email: </label><input type="text" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}" name="currentemail" id="email" required><br/>
+                    <label>New Email: </label><input type="text" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}" name="newemail" id="email" required><br/>
+                    <label>Confirm Email: </label><input type="text" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}" name="confirmemail" id="email" required><br/>
+                    <input class="loginsubmission" type="submit" value="Confirm" />
+                    ${confirmEmailMessage}
+                </fieldset>
+            </form>
+        </div> 
+
         Your posts:
         <table>
             <tr>

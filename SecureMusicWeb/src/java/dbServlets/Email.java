@@ -5,6 +5,7 @@
  */
 package dbServlets;
 
+import SecurityClasses.LockEmail;
 import static SecurityClasses.PasswordHash.hashPass;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -46,10 +47,6 @@ public class Email extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //Set up email details
-        final String username = "securemusicweb@gmail.com";
-        final String password = "WenjiaWang2018";
-
         //Set up HTML sanitizers to allow inline formatting and links only
         PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.LINKS);
 
@@ -73,9 +70,6 @@ public class Email extends HttpServlet {
             dbURL = ("jdbc:postgresql://" + cmpHost + "/" + dbName);
             Connection connection = DriverManager.getConnection(dbURL, dbName, dbPassword);
 
-            //Hash the newly generated temporary password
-            String hashPass = hashPass(newPass);
-
             //Check if user exists in database 
             PreparedStatement ps = connection.prepareStatement("SELECT * from musicweb.dbuser WHERE username = ? AND email = ?");
             ps.setString(1, resetUser);
@@ -83,41 +77,22 @@ public class Email extends HttpServlet {
             ResultSet rs = ps.executeQuery();
             //Assign true to found if there is a result
             boolean found = rs.next();
+            String salt = rs.getString("salt");
 
             //If user found, update password and send email
             if (found) {
+
+                //Hash the newly generated temporary password
+                String hashPass = hashPass(salt + newPass);
+
                 ps = connection.prepareStatement("UPDATE musicweb.dbuser SET password = ? WHERE username = ?");
                 ps.setString(1, hashPass);
                 ps.setString(2, resetUser);
                 ps.executeUpdate();
 
-                //Setup Gmail properties for sending emails
-                Properties emailProperties = new Properties();
-                emailProperties.put("mail.smtp.auth", "true");
-                emailProperties.put("mail.smtp.starttls.enable", "true");
-                emailProperties.put("mail.smtp.host", "smtp.gmail.com");
-                emailProperties.put("mail.smtp.port", "587");
-
-                Session session = Session.getInstance(emailProperties, new javax.mail.Authenticator() {
-                    @Override
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(username, password);
-                    }
-                });
-                
-                //Send email with new password (unhashed)
-                Message emailMessage = new MimeMessage(session);
-                emailMessage.setFrom(new InternetAddress("securemusicweb@gmail.com"));
-                emailMessage.setRecipients(Message.RecipientType.TO,
-                        InternetAddress.parse(resetEmail));
-                emailMessage.setSubject("You requested a password reset");
-                emailMessage.setText("Dear " + resetUser
-                        + ",\n\nYou have recently requested a password reset.\n"
-                        + "Please use this to log in and change your password \n\n"
-                        + "Your temporary password is: \n" + newPass
-                        + "\nIf you hadn't requested a password reset, "
-                        + "please contact the website administrator.\n\n - SecureMusicWeb");
-                Transport.send(emailMessage);
+                LockEmail lockE = new LockEmail();
+                lockE.initialize();
+                lockE.changePassEmail(resetEmail, resetUser, newPass);
                 
                 //Redirect to a confirmation page, return to index after 3s
                 try (PrintWriter out = response.getWriter()) {

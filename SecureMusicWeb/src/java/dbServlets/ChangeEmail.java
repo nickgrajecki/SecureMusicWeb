@@ -1,7 +1,13 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package dbServlets;
 
 import static SecurityClasses.PasswordHash.hashPass;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -19,8 +25,12 @@ import javax.servlet.http.HttpSession;
 import org.owasp.html.PolicyFactory;
 import org.owasp.html.Sanitizers;
 
-@WebServlet(name = "ChangePass", urlPatterns = {"/ChangePass"})
-public class ChangePass extends HttpServlet {
+/**
+ *
+ * @author Nick
+ */
+@WebServlet(name = "ChangeEmail", urlPatterns = {"/ChangeEmail"})
+public class ChangeEmail extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -31,7 +41,7 @@ public class ChangePass extends HttpServlet {
         //Set up HTML sanitizers to allow inline formatting and links only
         PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.LINKS);
 
-        //Initialise variable to check if passwords match
+        //Initialise variable to check if emails match
         boolean emailConfirmed = false;
 
         try {
@@ -46,41 +56,36 @@ public class ChangePass extends HttpServlet {
 
             //Request data from password change form, sanitize it, hash passwords
             String username = session.getAttribute("username").toString();
-            String currentPass = policy.sanitize(request.getParameter("currentpass"));
-            String newPass = policy.sanitize(request.getParameter("newpass"));
-            String confirmPass = policy.sanitize(request.getParameter("confirmpass"));
+            String currentEmail = policy.sanitize(request.getParameter("currentemail")).replaceAll("&#64;", "@");
+            String newEmail = policy.sanitize(request.getParameter("newemail")).replaceAll("&#64;", "@");
+            String confirmEmail = policy.sanitize(request.getParameter("confirmemail")).replaceAll("&#64;", "@");
 
             //Retrieve password 
-            PreparedStatement ps = connection.prepareStatement("SELECT password, salt FROM musicweb.dbuser WHERE username =? ");
+            PreparedStatement ps = connection.prepareStatement("SELECT email FROM musicweb.dbuser WHERE username =? ");
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
             rs.next();
-            String dbPass = rs.getString("password");
-            String salt = rs.getString("salt");
+            String dbEmail = rs.getString("email");
 
             //Check password matches with database and new passwords match too
-            String hashedPass = hashPass(salt + currentPass);
-            String hashedNewPass = hashPass(salt + newPass);
-            boolean passConfirmed = hashedPass.equals(dbPass);
-            boolean matchingPass = newPass.equals(confirmPass);
+            emailConfirmed = currentEmail.equals(dbEmail);
+            boolean matchingEmail = newEmail.equals(confirmEmail);
 
             //If db password matches and new passwords match each other
-            if (passConfirmed && matchingPass) {
+            if (emailConfirmed && matchingEmail) {
                 //Change password if both checks pass                
-                PreparedStatement ps2 = connection.prepareStatement("UPDATE musicweb.dbuser SET password =? WHERE username =?");
-                ps2.setString(1, hashedNewPass);
+                PreparedStatement ps2 = connection.prepareStatement("UPDATE musicweb.dbuser SET email =? WHERE username =?");
+                ps2.setString(1, newEmail);
                 ps2.setString(2, username);
                 ps2.executeUpdate();
-                request.setAttribute("confirmPassMessage", "Password changed successfully");
+                request.setAttribute("confirmEmailMessage", "Email changed successfully");
             } else {
                 //Redirect to try again
-                request.setAttribute("confirmPassMessage", "Incorrect details - try again");
+                request.setAttribute("confirmEmailMessage", "Incorrect details - try again");
             }
             request.getRequestDispatcher("profile.jsp").forward(request, response);
         } catch (ClassNotFoundException | SQLException e) {
             System.out.println(e.getMessage());
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(ChangePass.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
