@@ -277,6 +277,7 @@ button:hover, .newusersubmission:hover, .loginsubmission:hover {
 }
 
 .blogs {
+    margin-top: 2em;
     width: 90%;
     background-color: #1e1e1e;
     font-size: large;
@@ -512,6 +513,23 @@ table, th, td {
 }
 .loginreg div[id=passwordReminder]{
     float: right;
+}
+
+.login {
+    width: 10%;
+    margin-left: 4.7%;
+    padding-left: 3em;
+    padding-bottom: 2em;
+    border: solid white 1px;
+}
+
+.login h1 {
+    padding-left: 0;
+}
+
+.login input {
+    margin-bottom: 1em;
+    font-size: 100%;
 }
 
 .popup {

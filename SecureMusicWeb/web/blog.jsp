@@ -54,8 +54,8 @@
             <div class="login">
                 <h1>Login </h1>
                 <form action="Login">
-                    <input type="text" name="username" placeholder="username">
-                    <input type="password" name="pass" placeholder="password">
+                    <input type="text" name="username" placeholder="username"> <br />
+                    <input type="password" name="pass" placeholder="password"> <br />
                     <input type="submit" value="Log in">
                 </form>
             </div>
