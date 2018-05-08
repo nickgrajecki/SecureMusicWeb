@@ -23,12 +23,12 @@
 
         <div class="nav">
             <ul class="navigationBar">
-                <li><a href="index.jsp">Home</a></li>
-                <li><a href="blog.html">Blog</a></li>
-                <li><a href="news.html">News</a></li>
-                <li><a href="loginregister.html">Login/Register</a></li>
-                <li><a href="profile.jsp">Profile</a></li>
-                <li><a href="contact.html">Contact Us</a></li>
+                <li id='navli'><a href="index.jsp">Home</a></li>
+                <li id='navli'><a href="blog.jsp">Blog</a></li>
+                <li id='navli'><a href="news.html">News</a></li>
+                <li id='navli'><a href="loginregister.html">Login/Register</a></li>
+                <li id='navli'><a href="profile.jsp">Profile</a></li>
+                <li id='navli'><a href="contact.html">Contact Us</a></li>
             </ul>
         </div>
 

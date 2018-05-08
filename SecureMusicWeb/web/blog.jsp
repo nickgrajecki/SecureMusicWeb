@@ -31,11 +31,12 @@
         <!--nav div containing links to all pages-->
         <div class="nav">
             <ul class="navigationBar">
-                <li><a href="index.jsp">Home</a></li>
-                <li><a href="blog.jsp">Blog</a></li>
-                <li><a href="news.html">News</a></li>
-                <li><a href="profile.jsp">Profile</a></li>
-                <li><a href="contact.html">Contact Us</a></li>
+                <li id='navli'><a href="index.jsp">Home</a></li>
+                <li id='navli'><a href="blog.jsp">Blog</a></li>
+                <li id='navli'><a href="news.html">News</a></li>
+                <li id='navli'><a href="loginregister.html">Login/Register</a></li>
+                <li id='navli'><a href="profile.jsp">Profile</a></li>
+                <li id='navli'><a href="contact.html">Contact Us</a></li>
             </ul>
         </div>
 
@@ -59,8 +60,6 @@
                 </form>
             </div>
         </div>
-
-        <!--div containing forum directory in the form of links-->
 
         <!-- Checks if logged in, if not, displays message, otherwise shows posts and allows to make new one --> 
         <div class="blogs">
@@ -110,7 +109,7 @@
                         <td class="item-price">$30.02</td>
                     </tr>                        
                     </tbody>
-                    <section class="fav"><img src="fav2.png"</section>
+                    <section class="fav"><img src="images\fav2.png"</section>
                         <%
                             }
                         %>
