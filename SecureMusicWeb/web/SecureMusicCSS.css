@@ -42,9 +42,9 @@ body {
     right: 25%;
 }
 
-.logo {
+/*.logo {
     margin-right: 2.5em;
-}
+}*/
 
 /*Styling for navigation bar*/
 .nav {
@@ -78,6 +78,7 @@ body {
     font-size: x-large;
 }
 
+/*Styling for slideshow of news on main page*/
 .newsFade img {
     width: 100%;
 }
@@ -96,6 +97,7 @@ body {
     display: block;
 }
 
+/*This was found on WW3 SCHOOLS*/
 .previous, .next {
     cursor: pointer;
     position: absolute;
@@ -272,6 +274,7 @@ button:hover, .newusersubmission:hover, .loginsubmission:hover {
     padding-top: 2em;
 }
 
+/*CSS Styling for the blog page*/
 .microblog {
     width: 85%;
 }
@@ -302,6 +305,7 @@ button:hover, .newusersubmission:hover, .loginsubmission:hover {
     content:"\a\a";
 }
 
+/*CSS Styling for the hover buttons on the main page*/
 .trend {
     text-align: center;
     position: relative;
@@ -343,6 +347,7 @@ button:hover, .newusersubmission:hover, .loginsubmission:hover {
     text-align: center;
 }
 
+/*CSS styling for the dummy contact form*/
 .contactForm {
     border: solid 1px white;
     padding: 1em;
@@ -426,6 +431,7 @@ a:visited {
 
 }
 
+/*Styling for the login tabs*/
 .loginSection a:visited {
     text-decoration: none;
 }
@@ -439,6 +445,7 @@ p {
     color: white;
 }
 
+/*styling for tables on the site*/
 table, th, td {
     border: 1px solid white;
 }
@@ -465,6 +472,7 @@ table, th, td {
     border-radius: 15px;
 }
 
+/*Profile styling*/
 #profileB {
     width: 48%;
     margin-left: 0%;
@@ -515,6 +523,7 @@ table, th, td {
     float: right;
 }
 
+/*Style for the login tab on the blog page*/
 .login {
     width: 10%;
     margin-left: 4.7%;
@@ -532,6 +541,7 @@ table, th, td {
     font-size: 100%;
 }
 
+/*Pop-up style*/
 .popup {
     position: relative;
     display: inline-block;
