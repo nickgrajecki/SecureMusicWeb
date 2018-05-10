@@ -143,7 +143,7 @@
                             dbURL = ("jdbc:postgresql://" + cmpHost + "/" + dbName);
                             Connection connection = DriverManager.getConnection(dbURL, dbName, dbPassword);
                             Statement stmt = connection.createStatement();
-                            String SQL2 = "SELECT * FROM musicweb.blogs";
+                            String SQL2 = "SELECT * FROM musicweb.blogs ORDER BY blogid DESC";
                             ResultSet rs = stmt.executeQuery(SQL2);
                             while (rs.next()) {
 
