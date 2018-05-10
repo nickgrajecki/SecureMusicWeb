@@ -50,7 +50,7 @@ public class ForgottenPass extends HttpServlet {
         match password requirements*/
         UUID randomGen = UUID.randomUUID();
         log("UUID One: " + randomGen);
-        String newPass = "T" + randomGen.toString().substring(0, 7) + "f";
+        String newPass = "T1" + randomGen.toString().substring(0, 7) + "f";
 
         String dbName, dbPassword, cmpHost, dbURL;
 

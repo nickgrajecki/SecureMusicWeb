@@ -47,7 +47,7 @@ function scrollFade() {
     $(window).on('scroll', function () {
         var st = $(this).scrollTop();
         fadeBG.css({
-            'opacity': 1 - st / 600
+            'opacity': 1 - st/ 600
         });
     });
 }

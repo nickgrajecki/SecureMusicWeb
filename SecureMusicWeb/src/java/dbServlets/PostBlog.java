@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -54,7 +53,7 @@ public class PostBlog extends HttpServlet {
                 ps.setString(2, blogContent);
                 ps.setString(3, blogTitle);
                 ps.executeUpdate();
-                response.sendRedirect("index.jsp");
+                response.sendRedirect("blog.jsp");
             } catch (ClassNotFoundException | SQLException e) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, e);
             }
