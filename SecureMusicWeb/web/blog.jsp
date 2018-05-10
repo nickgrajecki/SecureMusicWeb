@@ -21,7 +21,7 @@
         <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=p6szcpxygu55ycfq39yga5wgs2vustj56sthnuidnu5heuja"></script>
         <script>tinymce.init({
                 selector: 'textarea',
-                width: '480',
+                width: '800',
                 resize: 'both'});
         </script>
     </head>
@@ -34,7 +34,6 @@
                 <li id='navli'><a href="index.jsp">Home</a></li>
                 <li id='navli'><a href="blog.jsp">Blog</a></li>
                 <li id='navli'><a href="news.html">News</a></li>
-                <li id='navli'><a href="loginregister.html">Login/Register</a></li>
                 <li id='navli'><a href="profile.jsp">Profile</a></li>
                 <li id='navli'><a href="contact.html">Contact Us</a></li>
             </ul>
@@ -129,7 +128,6 @@
             <form id ="blogSubmit" method="post" action="PostBlog">
                 <h3>Create your blog post</h3>
                 <!--Form only allows certain characters to be entered-->
-                <label>Blog title: </label><input type="text" name="blogtitle" id="blogtitle" placeholder="Enter Blog Title"><br/>
                 <textarea class="blogText" type="text" name="blogcontent"></textarea>
                 <input class="button" type="submit" value="Post" />
             </form><br>

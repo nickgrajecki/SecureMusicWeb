@@ -18,7 +18,7 @@ body {
 
 .header h1 {
     display: inline;
-    font-size: 1000%;
+    font-size: 700%;
 }
 
 .tagline {
@@ -53,7 +53,7 @@ body {
     left: 0;
     z-index: 9999;
     width: 100%;
-    height: 7%;
+    height: 9%;
     background-color: rgba(0, 0, 0, 0.5);
 }
 
@@ -62,6 +62,7 @@ body {
     text-decoration: none;
     color: white;
     font-size: 140%;
+    padding-left: 6em;;
 }
 
 .nav a:hover {
@@ -74,7 +75,8 @@ body {
 
 .navigationBar li {
     display: inline-block;
-    margin-left: 10em;
+    margin-left: auto;
+    margin-right: auto;
     font-size: x-large;
 }
 
@@ -355,6 +357,7 @@ button:hover, .newusersubmission:hover, .loginsubmission:hover {
     background-color: #1e1e1e;
     display: inline-block;
     margin-top: 3em;
+    font-size: small;
 }
 
 .socialMedia {
@@ -602,3 +605,52 @@ table, th, td {
     display: inline;
     color: grey;
 }
+
+.profile {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.profile h3 {
+    font-size: 350%;
+}
+
+.profile h2 {
+    padding-left: 10em;
+}
+
+.yourPosts {
+   width: 80%;
+   display: block;
+   border-bottom: white 1px solid;
+}
+
+#changepass, #changeemail {
+    width: 47%;
+    display: block;
+}
+
+#changeemail {
+    border-left: white 1px solid;
+}
+
+#changepass input, #changeemail input{
+    width: 30%;
+    margin-left: 0;
+    right: 0;
+}
+
+#changepass label, #changeemail label {
+    text-align: right;
+}
+
+.pastPostsTime {
+    text-align: right;
+    color: grey;
+}
+
+#passchange {
+    text-align: right;
+}
+

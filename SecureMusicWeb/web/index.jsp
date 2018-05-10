@@ -30,7 +30,6 @@
                 <li id='navli'><a href="index.jsp">Home</a></li>
                 <li id='navli'><a href="blog.jsp">Blog</a></li>
                 <li id='navli'><a href="news.html">News</a></li>
-                <li id='navli'><a href="loginregister.html">Login/Register</a></li>
                 <li id='navli'><a href="profile.jsp">Profile</a></li>
                 <li id='navli'><a href="contact.html">Contact Us</a></li>
             </ul>
