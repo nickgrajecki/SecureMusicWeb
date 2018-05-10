@@ -132,15 +132,6 @@
                 <input class="button" type="submit" value="Post" />
             </form><br>
             <div>
-                <table>
-
-                    <!--<thead>
-                        <tr>
-                            <th scope="col" colspan="2">Title</th>
-                            <th scope="col">Time</th>
-                            <th scope="col">Content</th>
-                        </tr>
-                    </thead>-->
                     
                     <%
                         try {
@@ -165,17 +156,6 @@
                         </div>
                     </div>
 
-                    <!--<tr>
-                        <td>
-                            <strong class="book-title"><%=rs.getString("title")%></strong>
-                            <span class="text-offset">by <%=rs.getString("username")%></span>
-                        </td>
-                        <td class="item-stock"><%=rs.getString("time").substring(0, 16)%></td>
-                        <td class="item-qty"><%=rs.getString("content")%></td>
-                        <td class="item-price">$30.02</td>
-                    </tr>                        
-                    </tbody>
-                    <section class="fav"><img src="images\fav2.png"</section>-->
                     <%
                         }
                     %>

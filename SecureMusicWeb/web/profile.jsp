@@ -73,12 +73,7 @@
 
             <div class="yourPosts">
                 <h3>Your posts:</h3>
-                <!--<table>
-                    <tr>
-                        <td><b>Title</b></td>
-                        <td><b>Author</b></td>
-                        <td><b>Content</b></td>
-                    </tr>-->
+                
                 <%
                     try {
                         Class.forName("org.postgresql.Driver");
@@ -103,14 +98,10 @@
                     <p class="pastPostsTime"><%=rs.getString("time").substring(0, 16)%></p>
                 </div>
 
-                <!--<tr>
-                    <td><%=rs.getString("title")%></td>
-                    <td><%=rs.getString("username")%></td>
-                    <td><%=rs.getString("content")%></td></tr><br>-->
                 <%
                     }
                 %>
-                <!--</table>-->
+           
                 <%
                     } catch (Exception e) {
                         e.printStackTrace();
