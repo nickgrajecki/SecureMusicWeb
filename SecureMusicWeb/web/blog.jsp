@@ -130,20 +130,20 @@
                 <h3>Create your blog post</h3>
                 <!--Form only allows certain characters to be entered-->
                 <label>Blog title: </label><input type="text" name="blogtitle" id="blogtitle" placeholder="Enter Blog Title"><br/>
-                <textarea type="text" name="blogcontent"></textarea>
+                <textarea class="blogText" type="text" name="blogcontent"></textarea>
                 <input class="button" type="submit" value="Post" />
             </form><br>
             <div>
                 <table>
 
-                    <thead>
+                    <!--<thead>
                         <tr>
                             <th scope="col" colspan="2">Title</th>
                             <th scope="col">Time</th>
                             <th scope="col">Content</th>
                         </tr>
-                    </thead>
-                    v
+                    </thead>-->
+                    
                     <%
                         try {
                             Class.forName("org.postgresql.Driver");
@@ -159,7 +159,15 @@
                             while (rs.next()) {
 
                     %>
-                    <tr>
+                    <div class="post">
+                        <p id="post-content"><%=rs.getString("content")%></p>
+                        <div class="postDetails">
+                            <p id="post-user">Post by: <%=rs.getString("username")%></p> <br />
+                            <p id="post-timestamp"><%=rs.getString("time").substring(0, 16)%></p>
+                        </div>
+                    </div>
+
+                    <!--<tr>
                         <td>
                             <strong class="book-title"><%=rs.getString("title")%></strong>
                             <span class="text-offset">by <%=rs.getString("username")%></span>
@@ -169,16 +177,16 @@
                         <td class="item-price">$30.02</td>
                     </tr>                        
                     </tbody>
-                    <section class="fav"><img src="images\fav2.png"</section>
-                        <%
-                            }
-                        %>
-                        <%
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        %>
-                        <% }%>
+                    <section class="fav"><img src="images\fav2.png"</section>-->
+                    <%
+                        }
+                    %>
+                    <%
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    %>
+                    <% }%>
                 </table>
             </div>
 

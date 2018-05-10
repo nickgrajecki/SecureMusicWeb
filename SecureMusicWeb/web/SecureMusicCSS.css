@@ -261,11 +261,10 @@ button:hover, .newusersubmission:hover, .loginsubmission:hover {
 
 .blogs {
     margin-top: 2em;
-    width: 90%;
+    width: 70%;
     background-color: #1e1e1e;
     font-size: large;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 4em;
     padding: 0.5em;
 }
 
@@ -574,4 +573,32 @@ table, th, td {
 
 #changeemail {
     float: right;
+}
+
+.blogs h3 {
+    font-size: 400%;
+}
+
+#blogSubmit {
+    margin-left: 5em;
+    margin-top: 2em;
+    padding-bottom: 2em;
+}
+
+.post {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1em;
+    border-top: white 1px solid;
+}
+.postDetails {
+    text-align: right;
+    margin-bottom: 4em;
+}
+
+#post-user, #post-timestamp {
+    width: 40%;
+    display: inline;
+    color: grey;
 }
