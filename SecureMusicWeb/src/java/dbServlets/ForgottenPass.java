@@ -28,7 +28,7 @@ import org.owasp.html.PolicyFactory;
 import org.owasp.html.Sanitizers;
 
 @WebServlet(urlPatterns = {"/Email"})
-public class Email extends HttpServlet {
+public class ForgottenPass extends HttpServlet {
 
     /**
      *
@@ -102,7 +102,7 @@ public class Email extends HttpServlet {
                 }
             }
         } catch (ClassNotFoundException | SQLException | NoSuchAlgorithmException | MessagingException ex) {
-            Logger.getLogger(Email.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ForgottenPass.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

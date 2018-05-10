@@ -6,10 +6,19 @@
 package SecurityClasses;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
+import java.util.Scanner;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -18,21 +27,34 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServlet;
 
 /**
  *
  * @author Nick
  */
-public class SendEmail {
+public class SendEmail extends HttpServlet {
 
     //Set up email details
     private String emUsername, emPassword;
     Properties emailProperties = new Properties();
 
-    public void initialize() throws FileNotFoundException, IOException {
-        BufferedReader br = new BufferedReader(new FileReader("email.config"));
-        emUsername = br.readLine();
-        emPassword = br.readLine();
+    public void initialize() throws FileNotFoundException, IOException, ClassNotFoundException, SQLException {
+        String dbName, dbPassword, cmpHost, dbURL;
+        
+        Class.forName("org.postgresql.Driver");
+        dbName = "groupcz";
+        dbPassword = "groupcz";
+        cmpHost = "cmpstudb-02.cmp.uea.ac.uk";
+        dbURL = ("jdbc:postgresql://" + cmpHost + "/" + dbName);
+        Connection connection = DriverManager.getConnection(dbURL, dbName, dbPassword);
+        String SQL = "SELECT * FROM musicweb.sendemail";
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery(SQL);
+        rs.next();
+        emUsername = rs.getString("email");
+        emPassword = rs.getString("password");
+        
         emailProperties.put("mail.smtp.auth", "true");
         emailProperties.put("mail.smtp.starttls.enable", "true");
         emailProperties.put("mail.smtp.host", "smtp.office365.com");
@@ -86,5 +108,15 @@ public class SendEmail {
                 + "the website administrator.\n\n - SecureMusicWeb");
         Transport.send(emailMessage);
     }
-
+//
+//    public static void main(String args[]) throws MessagingException, IOException {
+//        File myFile = new File("./email.config");
+//        System.out.println("Attempting to read from file in: " + myFile.getCanonicalPath());
+//        Scanner input = new Scanner(myFile);
+//        String in = "";
+//        in = input.nextLine();
+////        SendEmail sendEmail = new SendEmail();
+////        sendEmail.initialize();
+////        sendEmail.lockedOut("nickgrajecki@gmail.com", "Nick");
+//    }
 }
