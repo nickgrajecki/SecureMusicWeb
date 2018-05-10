@@ -5,6 +5,7 @@
  */
 package dbServlets;
 
+import SecurityClasses.SendEmail;
 import static SecurityClasses.PasswordHash.hashPass;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -16,6 +17,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.mail.MessagingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -53,7 +55,7 @@ public class Login extends HttpServlet {
 
             //My failed attempt at IP flood control
 //            String IPAddress = InetAddress.getLocalHost().toString();
-//            It does a weird thing of 'COMPUTER NAME/IP ADDRESS' so I split it
+//            It shows it as 'COMPUTER NAME/IP ADDRESS' so I split it
 //            String[] IPparts = IPAddress.split("/");
 //            IPAddress = IPparts[1];
 //            int IPAttemptJ = 0;
@@ -91,11 +93,12 @@ public class Login extends HttpServlet {
             String logName = policy.sanitize(request.getParameter("username"));
             String logPass = policy.sanitize(request.getParameter("pass"));
 
-            PreparedStatement psHash = connection.prepareStatement("SELECT salt FROM musicweb.dbuser WHERE username = ?");
+            PreparedStatement psHash = connection.prepareStatement("SELECT salt, email FROM musicweb.dbuser WHERE username = ?");
             psHash.setString(1, logName);
             ResultSet rsHash = psHash.executeQuery();
             rsHash.next();
             String salt = rsHash.getString("salt");
+            String email = rsHash.getString("email");
 
             String saltedPass = salt + logPass;
             String hashedPass = hashPass(saltedPass);
@@ -110,7 +113,6 @@ public class Login extends HttpServlet {
 
             //Convert time from ms to minutes
             long timeLeft = (((currentTime - failedTime) / 1000) / 60);
-            long timeRemaining = 30 - timeLeft;
             boolean timeElapsed = timeLeft > 30;
 
             //If 30 minutes elapsed, unlock the user, reset attempt count
@@ -143,8 +145,10 @@ public class Login extends HttpServlet {
                     ps2.setLong(1, currentTime);
                     ps2.setString(2, logName);
                     ps2.executeUpdate();
-                    request.setAttribute("invalidMessage", "Password or username invalid");
-                    
+                    SendEmail sendEmail = new SendEmail();
+                    sendEmail.initialize();
+                    sendEmail.lockedOut(email, logName);
+                    request.getRequestDispatcher("index.jsp").forward(request, response);
                 }
                 //If failed attempts over allowed threshold
             } else if (failedAttempt >= 3) {
@@ -152,7 +156,7 @@ public class Login extends HttpServlet {
             }
             request.getRequestDispatcher("index.jsp").forward(request, response);
 
-        } catch (NoSuchAlgorithmException | ClassNotFoundException | SQLException ex) {
+        } catch (NoSuchAlgorithmException | ClassNotFoundException | SQLException | MessagingException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

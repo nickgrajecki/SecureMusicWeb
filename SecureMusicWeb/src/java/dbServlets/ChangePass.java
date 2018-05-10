@@ -31,8 +31,6 @@ public class ChangePass extends HttpServlet {
         //Set up HTML sanitizers to allow inline formatting and links only
         PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.LINKS);
 
-        //Initialise variable to check if passwords match
-        boolean emailConfirmed = false;
 
         try {
             //Connect to database

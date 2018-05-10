@@ -5,11 +5,10 @@
  */
 package dbServlets;
 
-import SecurityClasses.LockEmail;
+import SecurityClasses.SendEmail;
 import static SecurityClasses.PasswordHash.hashPass;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Properties;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -19,13 +18,7 @@ import java.sql.SQLException;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -90,7 +83,7 @@ public class Email extends HttpServlet {
                 ps.setString(2, resetUser);
                 ps.executeUpdate();
 
-                LockEmail lockE = new LockEmail();
+                SendEmail lockE = new SendEmail();
                 lockE.initialize();
                 lockE.changePassEmail(resetEmail, resetUser, newPass);
                 
