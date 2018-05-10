@@ -95,66 +95,70 @@ public class Login extends HttpServlet {
             PreparedStatement psHash = connection.prepareStatement("SELECT salt, email FROM musicweb.dbuser WHERE username = ?");
             psHash.setString(1, logName);
             ResultSet rsHash = psHash.executeQuery();
-            rsHash.next();
-            String salt = rsHash.getString("salt");
-            String email = rsHash.getString("email");
+            boolean userExists = rsHash.next();
 
-            String saltedPass = salt + logPass;
-            String hashedPass = hashPass(saltedPass);
+            if (userExists) {
+                String salt = rsHash.getString("salt");
+                String email = rsHash.getString("email");
 
-            //Retrieve number of failed logins and time of last attempt
-            PreparedStatement ps1 = connection.prepareStatement("SELECT failed_attempts, last_attempt FROM musicweb.dbuser WHERE username = ?");
-            ps1.setString(1, logName);
-            ResultSet rs = ps1.executeQuery();
-            rs.next();
-            int failedAttempt = rs.getInt("failed_attempts");
-            long failedTime = rs.getLong("last_attempt");
+                String saltedPass = salt + logPass;
+                String hashedPass = hashPass(saltedPass);
 
-            //Convert time from ms to minutes
-            long timeLeft = (((currentTime - failedTime) / 1000) / 60);
-            boolean timeElapsed = timeLeft > 30;
+                //Retrieve number of failed logins and time of last attempt
+                PreparedStatement ps1 = connection.prepareStatement("SELECT failed_attempts, last_attempt FROM musicweb.dbuser WHERE username = ?");
+                ps1.setString(1, logName);
+                ResultSet rs = ps1.executeQuery();
+                rs.next();
+                int failedAttempt = rs.getInt("failed_attempts");
+                long failedTime = rs.getLong("last_attempt");
 
-            //If 30 minutes elapsed, unlock the user, reset attempt count
-            if (timeElapsed && failedAttempt >= 3) {
-                PreparedStatement ps = connection.prepareStatement("UPDATE musicweb.dbuser SET failed_attempts = 0 WHERE username = ?");
-                ps.setString(1, logName);
-                ps.executeUpdate();
-                failedAttempt = 0;
-            }
+                //Convert time from ms to minutes
+                long timeLeft = (((currentTime - failedTime) / 1000) / 60);
+                boolean timeElapsed = timeLeft > 30;
 
-            //Allow login if details are correct and user isn't locked out
-            if (UserCheck.verifyUser(logName, hashedPass) && failedAttempt < 3) {
-                PreparedStatement ps = connection.prepareStatement("UPDATE musicweb.dbuser SET failed_attempts = 0 WHERE username = ?");
-                ps.setString(1, logName);
-                ps.executeUpdate();
-                session.setAttribute("username", logName);
-                session.setAttribute("isLoggedIn", true);
-
-                //If details are incorrect
-            } else if (failedAttempt < 3) {
-                //Add +1 to failed attempts
-                PreparedStatement ps = connection.prepareStatement("UPDATE musicweb.dbuser SET failed_attempts = failed_attempts + 1 WHERE username = ?");
-                ps.setString(1, logName);
-                ps.executeUpdate();
-                if (failedAttempt < 2) {
-                    request.setAttribute("invalidMessage", "Password or username invalid");
-                } else {
-                    //If this was the last allowed attempt, time-lock account and send email
-                    PreparedStatement ps2 = connection.prepareStatement("UPDATE musicweb.dbuser SET last_attempt = ? WHERE username = ?");
-                    ps2.setLong(1, currentTime);
-                    ps2.setString(2, logName);
-                    ps2.executeUpdate();
-                    SendEmail sendEmail = new SendEmail();
-                    sendEmail.initialize();
-                    sendEmail.lockedOut(email, logName);
-                    request.getRequestDispatcher("index.jsp").forward(request, response);
+                //If 30 minutes elapsed, unlock the user, reset attempt count
+                if (timeElapsed && failedAttempt >= 3) {
+                    PreparedStatement ps = connection.prepareStatement("UPDATE musicweb.dbuser SET failed_attempts = 0 WHERE username = ?");
+                    ps.setString(1, logName);
+                    ps.executeUpdate();
+                    failedAttempt = 0;
                 }
-                //If failed attempts over allowed threshold
-            } else if (failedAttempt >= 3) {
+
+                //Allow login if details are correct and user isn't locked out
+                if (UserCheck.verifyUser(logName, hashedPass) && failedAttempt < 3) {
+                    PreparedStatement ps = connection.prepareStatement("UPDATE musicweb.dbuser SET failed_attempts = 0 WHERE username = ?");
+                    ps.setString(1, logName);
+                    ps.executeUpdate();
+                    session.setAttribute("username", logName);
+                    session.setAttribute("isLoggedIn", true);
+
+                    //If details are incorrect
+                } else if (failedAttempt < 3) {
+                    //Add +1 to failed attempts
+                    PreparedStatement ps = connection.prepareStatement("UPDATE musicweb.dbuser SET failed_attempts = failed_attempts + 1 WHERE username = ?");
+                    ps.setString(1, logName);
+                    ps.executeUpdate();
+                    if (failedAttempt < 2) {
+                        request.setAttribute("invalidMessage", "Password or username invalid");
+                    } else {
+                        //If this was the last allowed attempt, time-lock account and send email
+                        PreparedStatement ps2 = connection.prepareStatement("UPDATE musicweb.dbuser SET last_attempt = ? WHERE username = ?");
+                        ps2.setLong(1, currentTime);
+                        ps2.setString(2, logName);
+                        ps2.executeUpdate();
+                        SendEmail sendEmail = new SendEmail();
+                        sendEmail.initialize();
+                        sendEmail.lockedOut(email, logName);
+                        request.getRequestDispatcher("index.jsp").forward(request, response);
+                    }
+                    //If failed attempts over allowed threshold
+                } else if (failedAttempt >= 3) {
+                    request.setAttribute("invalidMessage", "Password or username invalid");
+                }
+            } else {
                 request.setAttribute("invalidMessage", "Password or username invalid");
             }
             request.getRequestDispatcher("index.jsp").forward(request, response);
-
         } catch (NoSuchAlgorithmException | ClassNotFoundException | SQLException | MessagingException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
