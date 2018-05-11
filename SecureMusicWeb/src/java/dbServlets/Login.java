@@ -172,6 +172,7 @@ public class Login extends HttpServlet {
                             SendEmail sendEmail = new SendEmail();
                             sendEmail.initialize();
                             sendEmail.lockedOut(email, logName, IPAddress);
+                            request.setAttribute("invalidMessage", "Password or username invalid");
                         }
 
                     } else if (failedAttempt >= 3) {

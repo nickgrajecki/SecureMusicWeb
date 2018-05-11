@@ -14,11 +14,17 @@ import java.security.NoSuchAlgorithmException;
  */
 public class PasswordHash {
     public static String hashPass(String password) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        md.update(password.getBytes());
-        byte[] b = md.digest();
+        // Message Digest object accepting an SHA-256 algorithm
+        MessageDigest messagedigest = MessageDigest.getInstance("SHA-256");
+        // Apply algorithm to password passed as an argument in the hashPass method
+        messagedigest.update(password.getBytes());
+        
+        // Byte array stores the value
+        byte[] bArray = messagedigest.digest();
+        
+        // Convert the contents of the array to a string
         StringBuffer sBuffer = new StringBuffer();
-        for (byte b1 : b) {
+        for (byte b1 : bArray) {
             sBuffer.append(Integer.toHexString(b1 & 0xff).toString());
         }
         return sBuffer.toString();

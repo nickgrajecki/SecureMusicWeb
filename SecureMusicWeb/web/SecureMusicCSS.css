@@ -1,4 +1,3 @@
-/*CSS for entire website*/
 body {
     background-color: black;
     font-family: 'Gugi', cursive;
@@ -7,7 +6,7 @@ body {
     padding: 0;
 }
 
-/*All styling for header on each page*/
+/* Header styles */
 .headerBackground {
     width: 100%;
     height: 100%;
@@ -42,11 +41,7 @@ body {
     right: 25%;
 }
 
-/*.logo {
-    margin-right: 2.5em;
-}*/
-
-/*Styling for navigation bar*/
+/*nav bar styling*/
 .nav {
     position: fixed;
     top: 0;
@@ -80,7 +75,7 @@ body {
     font-size: x-large;
 }
 
-/*Styling for slideshow of news on main page*/
+/* Slideshow styling */
 .newsFade img {
     width: 100%;
 }
@@ -99,7 +94,8 @@ body {
     display: block;
 }
 
-/*This was found on WW3 SCHOOLS*/
+/*This was found on WW3 SCHOOLS
+https://www.w3schools.com/howto/howto_js_slideshow.asp*/
 .previous, .next {
     cursor: pointer;
     position: absolute;
@@ -119,7 +115,7 @@ body {
     border-radius: 3px 0 0 3px;
 }
 
-/* On hover, add a black background color with a little bit see-through */
+/* Translucent background on hover */
 .prev:hover, .next:hover {
     background-color: rgba(0,0,0,0.8);
 }
@@ -134,7 +130,7 @@ body {
     text-align: center;
 }
 
-/* The dots/bullets/indicators */
+/* Dots */
 .dot {
     cursor: pointer;
     height: 15px;
@@ -150,7 +146,7 @@ body {
     background-color: #717171;
 }
 
-/* Fading animation */
+/* Fade animation */
 .fade {
     -webkit-animation-name: fade;
     -webkit-animation-duration: 1.5s;
@@ -169,7 +165,7 @@ body {
     padding-bottom: 0.5em;
 }
 
-/*Styling for login section*/
+/* Log in styling */
 .loginSection {
     width: 16%;
     float: right;
@@ -212,12 +208,12 @@ fieldset {
     border: none;
 }
 
-/*Styling for content of login and register tabs*/
+/* login and register tabs */
 .tabContent {
     text-align: left;
 }
 
-/*Login/register submission button styling*/
+/* Button styling*/
 button, .newusersubmission, .loginsubmission {
     background-color: darkgray;
     color: black;
@@ -228,7 +224,6 @@ button, .newusersubmission, .loginsubmission {
     margin: 1%;
 }
 
-/*Additional styling when hovering over buttons*/
 button:hover, .newusersubmission:hover, .loginsubmission:hover {
     background-color: white;
     color: black;
@@ -621,9 +616,9 @@ table, th, td {
 }
 
 .yourPosts {
-   width: 80%;
-   display: block;
-   border-bottom: white 1px solid;
+    width: 80%;
+    display: block;
+    border-bottom: white 1px solid;
 }
 
 #changepass, #changeemail {
